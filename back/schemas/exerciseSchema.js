@@ -1,6 +1,6 @@
-const z = require("zod")
-const { Muscles } = require("../enums/Muscles")
-const { Categories } = require("../enums/Categories")
+import { z } from "zod"
+import { Muscles } from "../enums/Muscles.js"
+import { Categories } from "../enums/Categories.js"
 
 const exerciseSchema = z.object({
     name: z.string().nonempty("Name is required."),
@@ -8,14 +8,10 @@ const exerciseSchema = z.object({
     muscle: z.enum(Object.values(Muscles), "Muscle is required.")
 })
 
-function validate (object) {
+export function validate (object) {
     return exerciseSchema.safeParse(object);
 }
 
-function partialValidate (object) {
+export function partialValidate (object) {
     return exerciseSchema.partial().safeParse(object);
-}
-
-module.exports = {
-    validate , partialValidate
 }

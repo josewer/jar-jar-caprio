@@ -20,7 +20,7 @@ Content-Type: application/json
 
 
 ### update an exercise
-PUT  http://localhost:3000/bed028e3-b9d2-45c8-ad08-db783722c415 HTTP/1.1
+PUT  http://localhost:3000/3069c359-5fc3-4cc9-856c-13f969eef39d HTTP/1.1
 Content-Type: application/json
 
 {

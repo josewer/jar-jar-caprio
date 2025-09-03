@@ -1,13 +1,13 @@
-const express = require("express");
-const { validate } = require("./schemas/exerciseSchema");
+import express, { json } from "express";
+import { validate } from "./schemas/exerciseSchema.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.disable("x-powered-by")
-app.use(express.json());
+app.use(json());
 
-const cors = require("cors");
+import cors from "cors";
 
 const CORS_VALIDOS = [
     "http://localhost:8080",
