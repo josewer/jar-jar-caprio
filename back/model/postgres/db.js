@@ -4,11 +4,11 @@ import config from '../../config.js'
 
 // Configuración de conexión
 const pool = new Pool({
-  user: config.db.user,
-  host: config.db.host,
-  database: config.db.name,
-  password: config.db.pass,
-  port: config.db.port,
+  user: config.db.postgres.user,
+  host: config.db.postgres.host,
+  database: config.db.postgres.name,
+  password: config.db.postgres.pass,
+  port: config.db.postgres.port,
   options: '-c search_path=public'
 });
 

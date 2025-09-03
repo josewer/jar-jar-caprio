@@ -4,19 +4,12 @@ import logger from "morgan";
 import cors from "cors";
 import config from "./config.js";
 
-const app = express();
-const port = config.port
+const app = express(); 
+const port = config.app.port
 app.disable("x-powered-by")
 app.use(json());
 
 console.clear();
-
-const CORS_VALIDOS = [
-    "http://localhost:8080",
-    "http://localhost:8081",
-    "http://localhost:5173"
-];
-
 app.use(logger('dev'))
 
 app.use(cors({
@@ -25,7 +18,7 @@ app.use(cors({
         // Allow requests without origin (postman)
         if (!origin) return callback(null, true);
 
-        if (CORS_VALIDOS.includes(origin)) {
+        if (config.cors.validOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error("CORS not allow for this domain: " + origin));
