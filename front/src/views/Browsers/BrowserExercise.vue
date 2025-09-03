@@ -90,7 +90,8 @@ onMounted(async () => {
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
-    margin-right: 1em;;
+    margin-right: 1em;
+    ;
 }
 
 .button-panel button:hover {
@@ -117,7 +118,6 @@ onMounted(async () => {
     border-collapse: collapse;
     width: 80%;
     max-width: 900px;
-    background: #fff;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -148,6 +148,10 @@ onMounted(async () => {
 /* Zebra rows */
 .exercise-table tbody tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+.exercise-table tbody tr:nth-child(odd) {
+    background: #fff;
 }
 
 /* Hover */

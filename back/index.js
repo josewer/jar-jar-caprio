@@ -1,19 +1,23 @@
 import express, { json } from "express";
-import { exercisesRouter } from "./routers/exercises-router.js";
+import { exercisesRouter } from "./routers/exercise-router.js";
+import logger from "morgan";
+import cors from "cors";
+import config from "./config.js";
 
 const app = express();
-const port = process.env.PORT || 3000;
-
+const port = config.port
 app.disable("x-powered-by")
 app.use(json());
 
-import cors from "cors";
+console.clear();
 
 const CORS_VALIDOS = [
     "http://localhost:8080",
     "http://localhost:8081",
     "http://localhost:5173"
 ];
+
+app.use(logger('dev'))
 
 app.use(cors({
     origin: function (origin, callback) {

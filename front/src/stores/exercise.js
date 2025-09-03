@@ -5,7 +5,7 @@ import { ref } from "vue";
 export const useExerciseStore = defineStore("exercise", () => {
 
     const exercises = ref([])
-    const API_URL = "http://localhost:3000/";
+    const API_URL = "http://localhost:3000/exercises/";
 
     const create = async (exercise) => {
 
@@ -61,8 +61,6 @@ export const useExerciseStore = defineStore("exercise", () => {
 
         if (response.ok) {
             const data = await response.json();
-
-            console.log(data)
             return data;
         } else {
             const error = await response.json().catch(() => ({ message: "Error fetching exercise" }));
