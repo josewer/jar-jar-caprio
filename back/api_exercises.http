@@ -2,7 +2,7 @@
 GET http://localhost:3000/exercises/ HTTP/1.1
 
 ### Get an exercise by id
-GET http://localhost:3000/exercises/fcac6a72-4eb9-4bb9-a794-18dc272b68a1 HTTP/1.1
+GET http://localhost:3000/exercises/8b1cf7cb-4f67-409b-9b2c-5f641899bfbe HTTP/1.1
 
 ### update an exercise
 PUT  http://localhost:3000/exercises/e28488bc-279a-4ca8-88f4-eba9376f4836 HTTP/1.1
