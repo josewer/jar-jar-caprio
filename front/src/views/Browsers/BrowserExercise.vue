@@ -2,9 +2,11 @@
 import HeaderComponent from '../../components/HeaderComponent.vue';
 import { useExerciseStore } from '../../stores/exercise';
 import { router } from '../../router';
-import { onMounted } from 'vue';
+import { onMounted , ref} from 'vue';
 
 const exerciseStore = useExerciseStore();
+
+const rowSelected = ref()
 
 const openViewExercise = (id) => {
     console.log(id)
@@ -16,6 +18,7 @@ const openViewExercise = (id) => {
 
 const handleRemove = async (id) => {
     await exerciseStore.deleteExercise(id);
+    rowSelected.value = '';
 }
 
 const handleCreate = () => {
@@ -28,9 +31,11 @@ const handleRefresh = async () => {
     await exerciseStore.getAll();
 }
 
+
 onMounted(async () => {
     await exerciseStore.getAll();
 })
+
 
 
 </script>
@@ -41,6 +46,7 @@ onMounted(async () => {
     <div class="table-container">
         <div class="button-panel">
             <button @click="handleCreate">Create</button>
+            <button @click="openViewExercise(rowSelected)" :disabled=!rowSelected>Edit</button>
             <button @click="handleRefresh">Refresh</button>
         </div>
         <table class="exercise-table">
@@ -53,7 +59,10 @@ onMounted(async () => {
                 </tr>
             </thead>
             <tbody>
-                <tr @dblclick="openViewExercise(exercise.id)" v-for="exercise in exerciseStore.exercises"
+                <tr @dblclick="openViewExercise(exercise.id)" 
+                    @click="rowSelected = exercise.id"
+                    :class="{ 'row-selected': rowSelected === exercise.id }"
+                v-for="exercise in exerciseStore.exercises"
                     :key="exercise.id">
                     <td>{{ exercise.name }}</td>
                     <td>{{ exercise.category }}</td>
@@ -158,5 +167,15 @@ onMounted(async () => {
 .exercise-table tbody tr:hover {
     background-color: rgba(26, 188, 156, 0.1);
     transition: background-color 0.2s ease;
+}
+
+.exercise-table tbody tr.row-selected {
+    background-color: rgba(26, 188, 156, 0.3);
+}
+
+button:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>
