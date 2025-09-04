@@ -1,7 +1,9 @@
 import { partialValidate, validate } from "../schemas/exerciseSchema.js";
+import { Exercise } from "../model/postgres-prisma/exercise.js";
 //import { Exercise } from "../model/local-storage/exercise.js";
 //import { Exercise } from "../model/postgres/Exercise.js";
-import { Exercise } from "../model/postgres-sequelize/Exercise.js";
+//import { Exercise } from "../model/postgres-sequelize/Exercise.js";
+
 
 export class ExerciseController {
 
@@ -70,15 +72,15 @@ export class ExerciseController {
             return res.status(400).json(JSON.parse(result.error.message));
         }
 
-        const exercise = await this.exerciseModel.put({ id , input: result.data });
+        const exercise = await this.exerciseModel.put({ id, input: result.data });
 
         if (exercise) {
             return res.status(200).json(exercise);
         }
 
-        return res.status(500).json({
-            error: "Error.",
-            details: 'Unexpected error'
+        return res.status(404).json({
+            error: "Not found.",
+            details: `Exercise with id ${id} does not exist.`
         });
     }
 }
