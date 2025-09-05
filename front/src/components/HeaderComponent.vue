@@ -51,7 +51,7 @@ nav {
 }
 
 .link:hover {
-    background-color: var(--button--hover-primary-background);
+    background-color: var(--button-hover-primary-background);
     transform: scale(1.05);
 }
 

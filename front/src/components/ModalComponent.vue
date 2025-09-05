@@ -86,7 +86,7 @@ function stopDrag() {
 
             <div class="button-panel">
                 <button class="btn btn-danger" @click="confirmDelete(true)">Delete</button>
-                <button class="btn btn-secondary" @click="confirmDelete(false)">Cancel</button>
+                <button class="btn btn-cancel" @click="confirmDelete(false)">Cancel</button>
             </div>
         </section>
     </div>
@@ -159,14 +159,7 @@ function stopDrag() {
     background: #c0392b;
 }
 
-.btn-secondary {
-    background: #a3a9ac;
-    color: #fff;
-}
 
-.btn-secondary:hover {
-    background: #808e8f;
-}
 
 /* Animación */
 @keyframes fadeIn {

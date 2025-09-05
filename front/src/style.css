@@ -6,9 +6,11 @@
   --table-selected-row-background: rgba(26, 188, 156, 0.3);
 
   --button-primary-background: #1abc9c;
-  --button--hover-primary-background: #34495e;
+  --button-hover-primary-background: #34495e;
   --button-secundary-background: #057760;
   --button-hover-secundary-background: #0b5546;
+
+  --label-form-color: #16a085; 
 }
 
 * {
@@ -23,4 +25,13 @@ body {
 
 li {
   list-style-type: none;
+}
+
+.btn-cancel:hover {
+    background: #808e8f;
+}
+
+.btn-cancel {
+    background: #a3a9ac;
+    color: #fff;
 }

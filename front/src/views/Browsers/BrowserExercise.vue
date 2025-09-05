@@ -49,7 +49,6 @@ const handleRefresh = async () => {
 
 
 const openViewExercise = (id: string) => {
-    console.log(id)
     router.push({
         name: "exercise-detail",
         params: { id }

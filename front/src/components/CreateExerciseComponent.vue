@@ -78,7 +78,7 @@ onMounted(async () => {
     <div class="form-container" v-else>
         <Form :validation-schema="exerciseSchema" :key="initialValues.id" :initial-values="initialValues"
             @submit="handleSubmit" id="exercise-form">
-            <h1 class="form-title">Register Exercise</h1>
+            <h2 class="form-title">Register Exercise</h2>
 
             <div class="form-group">
                 <label for="name">Exercise name:</label>
@@ -110,17 +110,16 @@ onMounted(async () => {
             </div>
 
             <button id="btSubmit" type="submit">Save Exercise</button>
-        </form>
+        </Form>
     </div>
 </template>
 
 
 <style lang="css" scoped>
+
 .msg-error {
     color: red;
 }
-
-
 
 /* Contenedor principal */
 .form-container {
@@ -164,7 +163,7 @@ form {
 .form-group label {
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #16a085;
+    color: var(--label-form-color);
     /* un verde-turquesa más oscuro para contraste */
     font-size: 0.95rem;
 }
