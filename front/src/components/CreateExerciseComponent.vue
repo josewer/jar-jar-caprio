@@ -8,7 +8,9 @@ import { Form, Field, ErrorMessage } from 'vee-validate';
 import { useExerciseStore } from '../stores/exercise.js';
 import { router } from '../router/index.js'
 import { useRoute } from 'vue-router';
-import { computed, onMounted, watchEffect, ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { toast } from "vue3-toastify";
+import SpinComponent from './SpinnerComponent.vue';
 
 const categoryOptions = Object.values(Categories);
 const musclesOptions = Object.values(Muscles);
@@ -19,24 +21,29 @@ const route = useRoute();
 const params = route?.params ?? null;
 const id = params?.id ?? null;
 const isEdit = !!id;
-
-console.log(isEdit)
+const isLoading = ref(true)
 
 const handleSubmit = async (values, { resetForm }) => {
 
     if (isEdit) {
         const exercise = new Exercise(values.name, values.category, values.muscle, id)
         await exerciseStore.update(id, exercise);
+        router.push({ "name": "exercises" }).then(() => {
+            toast.success("Successfully updated.");
+        });
     } else {
         const exercise = new Exercise(values.name, values.category, values.muscle)
         await exerciseStore.create(exercise);
+        router.push({ "name": "exercises" }).then(() => {
+            toast.success("Successfully created.");
+        });
     }
 
-    router.push({ "name": "exercises" })
+    resetForm();
 }
 
 const initialValues = ref({
-    id : '',
+    id: '',
     name: '',
     category: '',
     muscle: ''
@@ -57,6 +64,8 @@ onMounted(async () => {
             console.error('Error al cargar ejercicio:', error);
         }
     }
+
+    isLoading.value = false;
 });
 
 
@@ -65,9 +74,10 @@ onMounted(async () => {
 <template>
     <HeaderComponent />
 
-    <div class="form-container">
-        <Form :validation-schema="exerciseSchema" :key="initialValues.id" :initial-values="initialValues" @submit="handleSubmit"
-            id="exercise-form">
+    <SpinComponent v-if="isLoading"/>
+    <div class="form-container" v-else>
+        <Form :validation-schema="exerciseSchema" :key="initialValues.id" :initial-values="initialValues"
+            @submit="handleSubmit" id="exercise-form">
             <h1 class="form-title">Register Exercise</h1>
 
             <div class="form-group">
@@ -109,6 +119,8 @@ onMounted(async () => {
 .msg-error {
     color: red;
 }
+
+
 
 /* Contenedor principal */
 .form-container {

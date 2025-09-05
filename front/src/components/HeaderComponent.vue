@@ -18,7 +18,7 @@ header {
     position: sticky;
     width: 100vw;
     top: 0;
-    background-color: #2c3e50;
+    background-color: var(--header-main-background);
     padding: 10px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -51,12 +51,12 @@ nav {
 }
 
 .link:hover {
-    background-color: #34495e;
+    background-color: var(--button--hover-primary-background);
     transform: scale(1.05);
 }
 
 .router-link-active {
-    background-color: #1abc9c;
+    background-color: var(--button-primary-background);
     color: white;
 }
 </style>
