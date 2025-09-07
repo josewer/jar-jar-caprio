@@ -1,6 +1,5 @@
 import { Pool } from 'pg';
-import config from '../../config.js'
-
+import config from '../../config.js';
 
 // Configuración de conexión
 const pool = new Pool({

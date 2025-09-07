@@ -1,6 +1,6 @@
 export const Categories = {
-    STRENGTH: "Strength",
-    CARDIO: "Cardio",
-    MOBILITY: "Mobility",
-    OTHER: "Other"
-}
+  STRENGTH: 'Strength',
+  CARDIO: 'Cardio',
+  MOBILITY: 'Mobility',
+  OTHER: 'Other'
+};
