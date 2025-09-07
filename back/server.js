@@ -1,14 +1,13 @@
 import cluster from "cluster";
 import os from "os";
-import dotenv from "dotenv";
+
 import { app, port } from "./app.js"
 
 if (cluster.isPrimary) {
     console.clear();
     console.log(`Master ${process.pid} is running`);
-    dotenv.config();
+   
     const numCPUs = os.cpus().length;
-
     // Forzar round-robin
     cluster.schedulingPolicy = cluster.SCHED_RR;
 

@@ -1,3 +1,6 @@
+
+process.loadEnvFile()
+
 export default {
     db: {
         postgres: {
