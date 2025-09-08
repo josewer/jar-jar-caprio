@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 
 const app = express();
-app.use(cookieParser())
+app.use(cookieParser());
 const port = config.app.port;
 
 app.disable('x-powered-by');
@@ -38,8 +38,10 @@ app.use((req, res, next) => {
 
 // Middleware de protección
 function authMiddleware (req, res, next) {
-  const token = req.cookies?.token || req.header('token');
+  let token = req.cookies?.token || req.header('Authorization');
   if (!token) return res.status(401).json({ message: 'No autenticado' });
+
+  if (token.startsWith('Bearer ')) { token = token.substring(7); }
 
   try {
     const decoded = jwt.verify(token, config.app.secret_jwt_key);

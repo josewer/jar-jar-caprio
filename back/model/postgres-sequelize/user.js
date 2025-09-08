@@ -6,11 +6,17 @@ import { Op } from 'sequelize';
 
 export class User {
   async get () {
-    return await userModel.findAll();
+    return await userModel.findAll({
+      attributes: {
+        exclude: ['password']
+      }
+    });
   }
 
   async getById ({ id }) {
-    return await userModel.findByPk(id);
+    return await userModel.findByPk(id, {
+      exclude: ['password']
+    });
   }
 
   async delete ({ id }) {
@@ -31,7 +37,9 @@ export class User {
 
     if (!created) { throw new AppError('Username already taken', 409); }
 
-    return user;
+    const { password, ...userWithoutPassword } = user.dataValues;
+
+    return userWithoutPassword;
   }
 
   async put ({ id, input }) {
@@ -61,7 +69,9 @@ export class User {
       return false;
     }
 
-    return updatedExercise;
+    const { password, ...userWithoutPassword } = updatedExercise.dataValues;
+
+    return userWithoutPassword;
   }
 
   async login ({ input }) {

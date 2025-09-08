@@ -21,7 +21,7 @@ export class UserController {
         const accessToken = jwt.sign(
           { ...user, jti: crypto.randomUUID() }
           , config.app.secret_jwt_key
-          , { expiresIn: '1h' }
+          , { expiresIn: config.app.access_token_expire_in }
         );
 
         const token = {
@@ -30,9 +30,9 @@ export class UserController {
 
         return res.status(200).cookie('access_token', accessToken, {
           httpOnly: true,
-          secure: false, // si es prod a true
+          secure: Boolean(config.app.cookie_access_token_secure), // si es prod a true
           sameSite: 'strict',
-          maxAge: 1000 * 60 * 60
+          maxAge: Number(config.app.cookie_access_token_expire_in)
         }).json(token);
       } else {
         return res.status(401).json({ error: 'Invalid username or password' });
