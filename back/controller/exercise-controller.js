@@ -2,7 +2,7 @@ import { partialValidate, validate } from '../schemas/exerciseSchema.js';
 // import { Exercise } from '../model/postgres-prisma/exercise.js';
 // import { Exercise } from "../model/local-storage/exercise.js";
 // import { Exercise } from "../model/postgres/Exercise.js";
- import { Exercise } from "../model/postgres-sequelize/Exercise.js";
+import { Exercise } from '../model/postgres-sequelize/Exercise.js';
 
 export class ExerciseController {
   exerciseModel = new Exercise();
@@ -16,7 +16,7 @@ export class ExerciseController {
     const id = req.params.id;
 
     const exercise = await this.exerciseModel.getById({ id });
-    console.log(exercise)
+    console.log(exercise);
     if (exercise) {
       return res.status(200).json(exercise);
     } else {

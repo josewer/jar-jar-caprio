@@ -13,7 +13,6 @@ const sequelize = new Sequelize(
     logging: (msg) => console.debug('[SQL] ' + msg)
   });
 
-// definir modelo
 export const exerciseModel = sequelize.define('Exercise', {
   id: {
     type: DataTypes.UUID,
@@ -35,5 +34,30 @@ export const exerciseModel = sequelize.define('Exercise', {
 {
   tableName: 'exercise',
   timestamps: false // desactiva createdAt y updatedAt
+}
+);
+
+export const userModel = sequelize.define('user', {
+  id: {
+    type: DataTypes.UUID,
+    primaryKey: true
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+},
+{
+  tableName: 'sec_user',
+  timestamps: false
 }
 );

@@ -11,7 +11,10 @@ export default {
     }
   },
   app: {
-    port: process.env.APP_PORT || 3000
+    port: process.env.APP_PORT || 3000,
+    saltOrRounds: process.env.SALT_ROUNDS || 10,
+    secret_jwt_key: process.env.SECRET_JWT_KEY,
+    access_token_expire_in: process.env.ACCESS_TOKEN_EXPIRE_IN
   },
   cors: {
     validOrigins: process.env.CORS_ORIGINS
