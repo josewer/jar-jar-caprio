@@ -22,7 +22,7 @@ export class ExerciseController {
     } else {
       return res.status(404).json({
         error: 'Not found',
-        details: `Exercise with id ${id} does not exist`
+        message: `Exercise with id ${id} does not exist`
       });
     }
   }
@@ -37,7 +37,7 @@ export class ExerciseController {
     } else {
       return res.status(404).json({
         error: 'Not found.',
-        details: `Exercise with id ${id} does not exist.`
+        message: `Exercise with id ${id} does not exist.`
       });
     }
   }
@@ -57,7 +57,7 @@ export class ExerciseController {
 
     return res.status(500).json({
       error: 'Error.',
-      details: 'Unexpected error'
+      message: 'Unexpected error'
     });
   }
 
@@ -77,7 +77,7 @@ export class ExerciseController {
 
     return res.status(404).json({
       error: 'Not found.',
-      details: `Exercise with id ${id} does not exist.`
+      message: `Exercise with id ${id} does not exist.`
     });
   }
 }

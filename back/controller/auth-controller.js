@@ -7,7 +7,7 @@ export class AuthController {
 
   async login (req, res) {
     const input = req.body;
-
+    console.log(input);
     if (!input.username || !input.password) {
       return res.status(400).json({ error: 'Username and password are required' });
     }
@@ -26,18 +26,44 @@ export class AuthController {
           access_token: accessToken
         };
 
-        return res.status(200).cookie('access_token', accessToken, {
+        res.set('Cache-Control', 'no-store');
+        res.cookie('access_token', accessToken, {
           httpOnly: true,
-          secure: Boolean(config.app.cookie_access_token_secure),
           sameSite: 'strict',
-          maxAge: Number(config.app.cookie_access_token_expire_in)
+          secure: false,
+          maxAge: 3600 * 1000,
+          path: '/'
         }).json(token);
       } else {
-        return res.status(401).json({ error: 'Invalid username or password' });
+        return res.status(401).json({ message: 'Invalid username or password' });
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
+  }
+
+  async session (req, res) {
+    let token = req.cookies?.access_token || req.header('Authorization');
+    if (!token) return res.status(401).json({ authenticated: false, message: 'Not is authorized' });
+
+    if (token.startsWith('Bearer ')) { token = token.substring(7); }
+
+    try {
+      const decoded = jwt.verify(token, config.app.secret_jwt_key);
+
+      return res.status(200).json({ authenticated: true, user: decoded });
+    } catch (err) {
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ authenticated: false, message: 'Session is expired' });
+      }
+
+      return res.status(401).json({ authenticated: false, message: 'Token is invalid' });
+    }
+  }
+
+  async logout (req, res) {
+    res.clearCookie('access_token', { path: '/' });
+    res.json({ message: 'Logged out' });
   }
 }

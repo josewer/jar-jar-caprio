@@ -2,8 +2,9 @@ import config from '../config.js';
 import jwt from 'jsonwebtoken';
 
 export function authMiddleware (req, res, next) {
-  let token = req.cookies?.token || req.header('Authorization');
-  if (!token) return res.status(401).json({ message: 'No autenticado' });
+  console.log(req.cookies);
+  let token = req.cookies?.access_token || req.header('Authorization');
+  if (!token) return res.status(401).json({ message: 'Not is authorized' });
 
   if (token.startsWith('Bearer ')) { token = token.substring(7); }
 
@@ -12,6 +13,10 @@ export function authMiddleware (req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(403).json({ message: 'Token inválido' });
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Session is expired' });
+    }
+
+    return res.status(401).json({ message: 'Token is invalid' });
   }
 }

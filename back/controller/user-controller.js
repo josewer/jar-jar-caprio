@@ -20,7 +20,7 @@ export class UserController {
     } else {
       return res.status(404).json({
         error: 'Not found',
-        details: `User with id ${id} does not exist`
+        message: `User with id ${id} does not exist`
       });
     }
   }
@@ -35,7 +35,7 @@ export class UserController {
     } else {
       return res.status(404).json({
         error: 'Not found.',
-        details: `User with id ${id} does not exist.`
+        message: `User with id ${id} does not exist.`
       });
     }
   }
@@ -60,7 +60,7 @@ export class UserController {
 
       return res.status(500).json({
         error: 'Error.',
-        details: 'Unexpected error'
+        message: 'Unexpected error'
       });
     }
   }
@@ -85,7 +85,7 @@ export class UserController {
 
       return res.status(404).json({
         error: 'Not found.',
-        details: `User with id ${id} does not exist.`
+        message: `User with id ${id} does not exist.`
       });
     }
   }

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 
+
 export const useExerciseStore = defineStore("exercise", () => {
 
     const exercises = ref([])
@@ -12,6 +13,7 @@ export const useExerciseStore = defineStore("exercise", () => {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify(exercise)
         });
 
@@ -30,6 +32,7 @@ export const useExerciseStore = defineStore("exercise", () => {
         const response = await fetch(`${API_URL}${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify(exercise)
         });
 
@@ -42,7 +45,8 @@ export const useExerciseStore = defineStore("exercise", () => {
     const deleteExercise = async (id) => {
 
         const response = await fetch(`${API_URL}${id}`, {
-            method: "DELETE"
+            method: "DELETE",
+            credentials: "include"
         });
 
         if (!response.ok) {
@@ -57,7 +61,9 @@ export const useExerciseStore = defineStore("exercise", () => {
 
     const getById = async (id) => {
 
-        const response = await fetch(`${API_URL}${id}`);
+        const response = await fetch(`${API_URL}${id}`, {
+            credentials: "include"
+        });
 
         if (response.ok) {
             const data = await response.json();
@@ -69,7 +75,9 @@ export const useExerciseStore = defineStore("exercise", () => {
     }
 
     const getAll = async () => {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL, {
+            credentials : "include"
+        });
 
         if (response.ok) {
             exercises.value = await response.json();

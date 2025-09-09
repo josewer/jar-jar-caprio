@@ -125,6 +125,7 @@ onMounted(async () => {
 }
 
 
+
 .button-panel button:hover {
     background-color: var(--button-hover-secundary-background);
     transform: scale(1.03);
