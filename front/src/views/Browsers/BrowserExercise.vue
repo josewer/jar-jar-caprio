@@ -3,9 +3,8 @@ import HeaderComponent from '../../components/HeaderComponent.vue';
 import { useExerciseStore } from '../../stores/exercise';
 import { router } from '../../router';
 import { onMounted, ref } from 'vue';
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
 import ModalComponent from '../../components/ModalComponent.vue';
+import { ToastCumtom } from '../../../utils/toast';
 
 const exerciseStore = useExerciseStore();
 const rowSelected = ref()
@@ -24,9 +23,14 @@ const handleRemove = async (remove: boolean) => {
 
     if (!remove) { return; }
 
-    await exerciseStore.deleteExercise(rowSelected.value);
-    rowSelected.value = '';
-    toast.success("Successfully deleted.")
+    try {
+        await exerciseStore.deleteExercise(rowSelected.value);
+        rowSelected.value = '';
+        ToastCumtom.success("Successfully deleted.")
+    } catch (error) {
+        ToastCumtom.error(error.message, error.status)
+    }
+
 }
 
 const showModalRemove = (id: string) => {
@@ -44,7 +48,12 @@ const handleCreate = () => {
 }
 
 const handleRefresh = async () => {
-    await exerciseStore.getAll();
+    try {
+        await exerciseStore.getAll();
+        ToastCumtom.success("Refreshed")
+    } catch (err) {
+        ToastCumtom.error(err.message, err.status)
+    }
 }
 
 

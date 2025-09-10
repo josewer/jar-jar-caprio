@@ -9,8 +9,8 @@ import { useExerciseStore } from '../stores/exercise.js';
 import { router } from '../router/index.js'
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { toast } from "vue3-toastify";
 import SpinComponent from './SpinnerComponent.vue';
+import { ToastCumtom } from '../../utils/toast.js';
 
 const categoryOptions = Object.values(Categories);
 const musclesOptions = Object.values(Muscles);
@@ -25,21 +25,25 @@ const isLoading = ref(true)
 
 const handleSubmit = async (values, { resetForm }) => {
 
-    if (isEdit) {
-        const exercise = new Exercise(values.name, values.category, values.muscle, id)
-        await exerciseStore.update(id, exercise);
-        router.push({ "name": "exercises" }).then(() => {
-            toast.success("Successfully updated.");
-        });
-    } else {
-        const exercise = new Exercise(values.name, values.category, values.muscle)
-        await exerciseStore.create(exercise);
-        router.push({ "name": "exercises" }).then(() => {
-            toast.success("Successfully created.");
-        });
-    }
+    try {
+        if (isEdit) {
+            const exercise = new Exercise(values.name, values.category, values.muscle, id)
+            await exerciseStore.update(id, exercise);
+            router.push({ "name": "exercises" }).then(() => {
+                ToastCumtom.success("Successfully updated.");
+            });
+        } else {
+            const exercise = new Exercise(values.name, values.category, values.muscle)
+            await exerciseStore.create(exercise);
+            router.push({ "name": "exercises" }).then(() => {
+                ToastCumtom.success("Successfully created.");
+            });
+        }
 
-    resetForm();
+        resetForm();
+    } catch (error) {
+        ToastCumtom.error(error.message, error.status);
+    }
 }
 
 const initialValues = ref({
@@ -57,11 +61,11 @@ onMounted(async () => {
             if (exercise) {
                 initialValues.value = { ...exercise };
             } else {
-                console.warn('Ejercicio no encontrado');
-                // opcional: router.push({ name: 'exercises' })
+                ToastCumtom.error('Exercise is not found.');
+                router.push({ name: 'exercises' })
             }
         } catch (error) {
-            console.error('Error al cargar ejercicio:', error);
+             ToastCumtom.error(error.message, error.status);
         }
     }
 
@@ -74,7 +78,7 @@ onMounted(async () => {
 <template>
     <HeaderComponent />
 
-    <SpinComponent v-if="isLoading"/>
+    <SpinComponent v-if="isLoading" />
     <div class="form-container" v-else>
         <Form :validation-schema="exerciseSchema" :key="initialValues.id" :initial-values="initialValues"
             @submit="handleSubmit" id="exercise-form">
@@ -116,7 +120,6 @@ onMounted(async () => {
 
 
 <style lang="css" scoped>
-
 .msg-error {
     color: red;
 }

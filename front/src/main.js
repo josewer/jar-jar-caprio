@@ -14,7 +14,6 @@ const toastDefaultConfig = {
     theme: 'dark'
 }
 
-
 createApp(App)
     .use(Vue3Toastify , toastDefaultConfig)
     .use(pinia)

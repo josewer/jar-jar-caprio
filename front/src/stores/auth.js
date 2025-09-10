@@ -4,8 +4,6 @@ import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = defineStore("auth", () => {
 
-    const API_URL = "http://localhost:3000/auth/";
-
     const auth = ref();
     const isAuthenticated = ref(false);
 

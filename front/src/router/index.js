@@ -5,8 +5,7 @@ import CreateExerciseComponent from "../components/CreateExerciseComponent.vue";
 import BrowserExercise from "../views/Browsers/BrowserExercise.vue";
 import LoginComponent from "../views/LoginComponent.vue";
 import { useAuthStore } from "../stores/auth";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { ToastCumtom } from "../../utils/toast";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -55,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
     } catch (err) {
         // Despues de comprobarla, si todavia me dice que no esta registrado se envia al login.
         router.push({name : 'Login'}).then(() => {
-            toast.warn(err.message);
+            ToastCumtom.warn(err.message)
         });
     }
     return next();

@@ -1,89 +1,60 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-
+import { api } from "../../api";
 
 
 export const useExerciseStore = defineStore("exercise", () => {
 
     const exercises = ref([])
-    const API_URL = "http://localhost:3000/exercises/";
+    const END_POINT = '/exercises';
 
     const create = async (exercise) => {
-
-        const response = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(exercise)
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "Error creating exercise");
+        try {
+            const response = await api.post(END_POINT, exercise);
+            const data = response.data;
+            exercises.value.push(data);
+            return data;
+        } catch (error) {
+            throw error;
         }
-
-        const data = await response.json();
-        exercises.value.push(data);
-        return data;
     };
 
     const update = async (id, exercise) => {
 
-        const response = await fetch(`${API_URL}${id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(exercise)
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || "Error updating exercise");
+        try {
+            await api.put(`${END_POINT}/${id}`, exercise);
+        } catch (error) {
+            throw error;
         }
     }
 
     const deleteExercise = async (id) => {
-
-        const response = await fetch(`${API_URL}${id}`, {
-            method: "DELETE",
-            credentials: "include"
-        });
-
-        if (!response.ok) {
-            const error = await response.json().catch(() => ({ message: "Error deleting exercise" }));
-            throw new Error(error.message);
+        try {
+            await api.delete(`${END_POINT}/${id}`);
+            const index = exercises.value.findIndex(e => e.id == id);
+            if (index !== -1) exercises.value.splice(index, 1);
+        } catch (error) {
+            throw error;
         }
-
-        const index = exercises.value.findIndex(e => e.id == id);
-        if (index !== -1) exercises.value.splice(index, 1);
     };
 
 
     const getById = async (id) => {
-
-        const response = await fetch(`${API_URL}${id}`, {
-            credentials: "include"
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            const error = await response.json().catch(() => ({ message: "Error fetching exercise" }));
-            throw new Error(error.message);
+        try {
+            const response = await api.get(`${END_POINT}/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
         }
     }
 
     const getAll = async () => {
-        const response = await fetch(API_URL, {
-            credentials : "include"
-        });
-
-        if (response.ok) {
-            exercises.value = await response.json();
-        } else {
-            const error = await response.json().catch(() => ({ message: "Error fetching exercises" }));
-            throw new Error(error.message);
+        try {
+            const response = await api.get(END_POINT);
+            exercises.value = response.data;
+            return response.data;
+        } catch (error) {
+            throw error;
         }
     };
 
