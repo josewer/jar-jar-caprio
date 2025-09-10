@@ -58,6 +58,7 @@ export const useAuthStore = defineStore("auth", () => {
             auth.value = data.user;
         } catch (err) {
             isAuthenticated.value = false;
+            auth.value = ''
             throw err;
         }
     };

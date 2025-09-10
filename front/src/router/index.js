@@ -43,21 +43,35 @@ export const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
 
-    const publicPages = ["/login"];
+    const publicPages = ["Login"];
     const authStore = useAuthStore();
 
-    if (publicPages.includes(to.path)) { return next(); }
+    let msgError = '';
 
-    try {
-        // Compruebo si la sesion no esta actualizada
-        if (!authStore.isAuthenticated) { await authStore.checkSession(); }
-    } catch (err) {
-        // Despues de comprobarla, si todavia me dice que no esta registrado se envia al login.
-        router.push({name : 'Login'}).then(() => {
-            ToastCumtom.warn(err.message)
+    // Compruebo si hay sesion
+    if (!authStore.isAuthenticated) {
+        try {
+            await authStore.checkSession();
+        } catch (error) {
+            msgError = error.message;
+        }
+    }
+
+    // Si hay sesion no dejo que vaya a las publicas
+    if (publicPages.includes(to.name)) {
+
+        if (authStore.isAuthenticated) { router.push({ name: 'Home' }); }
+
+        return next();
+    }
+
+    // Si no tiene sesion no le dejo que vaya a las privadas
+    if (!authStore.isAuthenticated) {
+        router.push({ name: 'Login' }).then(() => {
+            ToastCumtom.warn(msgError)
         });
     }
-    return next();
 
+    return next();
 });
 

@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { toast } from 'vue3-toastify';
 import { useAuthStore } from '../stores/auth';
 import { router } from "../router";
+import { ToastCumtom } from '../../utils/toast';
 
 const input = ref({
     username: 'silvana',
@@ -10,6 +11,7 @@ const input = ref({
 })
 
 const authStore = useAuthStore();
+
 
 const handleSubmit = async () => {
 
@@ -22,14 +24,10 @@ const handleSubmit = async () => {
 
     try {
         await authStore.getLogin(data.username, data.password);
-        router.push({
-            name: "Home"
-        })
-    } catch (err) {
-         toast.error(err.message);
+        router.push({ name: "Home" })
+    } catch (error) {
+        ToastCumtom.error(error.message)
     }
-    
-    
 }
 
 </script>
