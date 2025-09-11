@@ -1,17 +1,21 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { jwtDecode } from "jwt-decode";
+import { config } from "../../config";
+
 
 export const useAuthStore = defineStore("auth", () => {
 
     const auth = ref();
     const isAuthenticated = ref(false);
+    const URL_BASE = config.api_url + '/auth'
+
 
     const getLogin = async (username, password) => {
 
         const body = { username, password };
 
-        const response = await fetch('http://localhost:3000/auth/login', {
+        const response = await fetch(`${URL_BASE}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -28,7 +32,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     const logout = async () => {
         try {
-            const response = await fetch('http://localhost:3000/auth/logout', {
+            const response = await fetch(`${URL_BASE}/logout`, {
                 method: "DELETE",
                 credentials: "include"
             });
@@ -43,9 +47,13 @@ export const useAuthStore = defineStore("auth", () => {
         }
     };
 
+    const setIsAuthenticated = (authenticated) => {
+        isAuthenticated.value = authenticated;
+    }
+
     const checkSession = async () => {
         try {
-            const response = await fetch('http://localhost:3000/auth/session', {
+            const response = await fetch(`${URL_BASE}/session`, {
                 method: "GET",
                 credentials: "include"
             });
@@ -68,6 +76,7 @@ export const useAuthStore = defineStore("auth", () => {
         getLogin,
         checkSession,
         logout,
+        setIsAuthenticated,
         auth,
         isAuthenticated
     }

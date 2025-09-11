@@ -19,11 +19,15 @@ app.use(json());
 app.use(corsMiddleware);
 app.use(workerMiddleware);
 app.use(logger('dev'));
+app.use(express.static('public'));
 
-// Paths
+// Paths routers
 app.use('/auth', authRouter);
 app.use('/exercises', authMiddleware, exercisesRouter);
 app.use('/users', authMiddleware, userRouter);
+
+// Health
+app.get('/health', (req, res) => { return res.status(200).json({ status: 'OK' }); });
 
 // 404 handler
 app.use((req, res) => { return res.status(404).json({ message: 'Page not found' }); });

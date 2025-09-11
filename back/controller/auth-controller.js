@@ -27,7 +27,7 @@ export class AuthController {
         };
 
         res.set('Cache-Control', 'no-store');
-        res.cookie('access_token', accessToken, {
+        return res.status(200).cookie('access_token', accessToken, {
           httpOnly: true,
           sameSite: 'strict',
           secure: false,

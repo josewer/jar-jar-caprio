@@ -4,6 +4,7 @@ import { router } from "./src/router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { AppError } from "./errors/AppError";
+import { useAuthStore } from "./src/stores/auth";
 
 
 export const api = axios.create({
@@ -15,8 +16,10 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         const serverMessage = error.response.data?.message || "Unknown error";
+        const authStore = useAuthStore();
 
         if (config.active_log_api) { console.error(error.response); }
+        authStore.setIsAuthenticated(false);
 
         const appError = new AppError(serverMessage , error?.response.status )
 

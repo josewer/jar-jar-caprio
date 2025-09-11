@@ -21,10 +21,10 @@ DELETE  http://localhost:3000/users/2a159078-1f80-469f-88b3-af8f19dbba2b HTTP/1.
 ### Create an user
 POST   http://localhost:3000/users/ HTTP/1.1
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZhbmEiLCJlbWFpbCI6Impvc2VAZ21haWwuY29tIiwianRpIjoiOGI1MGFjMjgtZjJlNy00ZWMxLThlM2MtY2M5YzVjOGQ5ZDhkIiwiaWF0IjoxNzU3NDE0NzA4LCJleHAiOjE3NTc0MTgzMDh9.IuMLi1QOykHtFaIP0_xoaCgNyxCGi_xht0wBpdaBnVc
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZhbmEiLCJlbWFpbCI6Impvc2VAZ21haWwuY29tIiwianRpIjoiOTNhNmFkYTEtN2FmMy00NDZhLTkyZGUtMTc4Njk3ZWY0YTU0IiwiaWF0IjoxNzU3NTg2OTcyLCJleHAiOjE3NTc1OTA1NzJ9.iXaUSYZsrTM71cR08Puh-E2RftJw_D37W6gXmcl97DU
 
 {
-    "username" : "miguel2555",
+    "username" : "josil2",
     "password" : "12345678",
-    "email" : "jose@gmail.com"
+    "email" : "josil@gmail.com"
 }

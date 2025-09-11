@@ -2,7 +2,6 @@ import config from '../config.js';
 import jwt from 'jsonwebtoken';
 
 export function authMiddleware (req, res, next) {
-  console.log(req.cookies);
   let token = req.cookies?.access_token || req.header('Authorization');
   if (!token) return res.status(401).json({ message: 'Not is authorized' });
 

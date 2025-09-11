@@ -1,11 +1,52 @@
 <script setup>
+import CardComponent from '../components/CardComponent.vue';
 import HeaderComponent from '../components/HeaderComponent.vue';
-
 </script>
 
 <template>
-    <HeaderComponent/>
-    <h1>Soy home</h1>
+  <HeaderComponent />
+  <div class="dashboard">
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+    <CardComponent />
+
+  </div>
 </template>
 
-<style lang="css" scoped></style>
+<style scoped>
+.dashboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  justify-content: space-evenly;
+}
+
+.dashboard::-webkit-scrollbar {
+  height: 8px;
+}
+
+.dashboard::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.dashboard::-webkit-scrollbar-track {
+  background: transparent;
+}
+</style>
