@@ -107,17 +107,19 @@ const ejercicios = ref([
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3); /* gris suave por defecto */
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   transition: all 0.3s;
+  border: 2px solid rgba(255, 255, 255, 0.4); /* borde sutil para que quede definido */
 }
 
 .circulo.activo {
-  background: #10b981;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: #10b981; /* verde sólido */
+  border: 2px solid #ffffff; /* borde blanco nítido */
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7); /* glow verde suave */
 }
 
 /* Barra de progreso */

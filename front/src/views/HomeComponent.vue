@@ -1,13 +1,14 @@
 <script setup>
 import CardComponent from '../components/CardComponent.vue';
 import HeaderComponent from '../components/HeaderComponent.vue';
+import RutineCard from '../components/RutineCard.vue';
 </script>
 
 <template>
   <HeaderComponent />
   <div class="dashboard">
     <CardComponent />
-    <CardComponent />
+    <RutineCard />
     <CardComponent />
     <CardComponent />
     <CardComponent />
