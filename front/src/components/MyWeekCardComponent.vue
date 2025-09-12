@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { router } from '../router/index.js'
 
 const dias = ref([
   { letra: "L", entrenado: true },
@@ -11,6 +12,8 @@ const dias = ref([
   { letra: "D", entrenado: false },
 ]);
 
+
+
 const entrenosPlanificados = 4;
 const entrenosCompletados = computed(() => dias.value.filter(d => d.entrenado).length);
 const totalTiempo = "3h 20m";
@@ -20,10 +23,15 @@ const ejercicios = ref([
   { nombre: "Cinta", icono: "🏃" },
   { nombre: "Sentadillas", icono: "🦵" },
 ]);
+
+const handleClickCard = () => {
+  router.push({name : 'RoutineDashboard'});
+}
+
 </script>
 
 <template>
-  <div class="tarjeta">
+  <div class="tarjeta" @click="handleClickCard">
     <!-- Título -->
     <h2 class="titulo">📅 Mi semana</h2>
 
@@ -76,6 +84,12 @@ const ejercicios = ref([
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+}
+
+.tarjeta:hover {
+    background: linear-gradient(135deg, #34d399, #2858a7);
+    transform: scale(1.05);
 }
 
 /* Título */

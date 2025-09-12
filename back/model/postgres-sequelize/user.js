@@ -85,6 +85,6 @@ export class User {
 
     if (!isValid) { return null; }
 
-    return { username: user.username, email: user.email };
+    return { id: user.id, username: user.username, email: user.email };
   }
 }

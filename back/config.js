@@ -8,6 +8,9 @@ export default {
       pass: process.env.POSTGRES_PASS,
       name: process.env.POSTGRES_DATABASE,
       port: process.env.POSTGRES_PORT
+    },
+    redis: {
+      url: 'redis://127.0.0.1:6379'
     }
   },
   app: {
