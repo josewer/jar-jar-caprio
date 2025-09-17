@@ -1,5 +1,5 @@
 <script setup>
-import RutineCard from './Routine.vue';
+import Routine from './Routine.vue';
 import HeaderComponent from './HeaderComponent.vue';
 
 </script>
@@ -7,11 +7,11 @@ import HeaderComponent from './HeaderComponent.vue';
 <template>
   <HeaderComponent />
   <div class="dashboard">
-    <RutineCard/>
-    <RutineCard/>
-    <RutineCard/>
-    <RutineCard/>
-    <RutineCard/>
+    <Routine/>
+    <Routine/>
+    <Routine/>
+    <Routine/>
+    <Routine/>
   </div>
 </template>
 

@@ -5,7 +5,7 @@ import config from '../config.js';
 export class AuthController {
   userModel = new User();
 
-  async login(req, res) {
+  async login (req, res) {
     const input = req.body;
 
     if (!input.username || !input.password) {

@@ -24,7 +24,7 @@ Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZhbmEiLCJlbWFpbCI6Impvc2VAZ21haWwuY29tIiwianRpIjoiOTNhNmFkYTEtN2FmMy00NDZhLTkyZGUtMTc4Njk3ZWY0YTU0IiwiaWF0IjoxNzU3NTg2OTcyLCJleHAiOjE3NTc1OTA1NzJ9.iXaUSYZsrTM71cR08Puh-E2RftJw_D37W6gXmcl97DU
 
 {
-    "username" : "josil2",
+    "username" : "admin",
     "password" : "12345678",
-    "email" : "josil@gmail.com"
+    "email" : "admin@gmail.com"
 }

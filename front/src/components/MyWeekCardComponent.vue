@@ -12,8 +12,6 @@ const dias = ref([
   { letra: "D", entrenado: false },
 ]);
 
-
-
 const entrenosPlanificados = 4;
 const entrenosCompletados = computed(() => dias.value.filter(d => d.entrenado).length);
 const totalTiempo = "3h 20m";
@@ -25,7 +23,7 @@ const ejercicios = ref([
 ]);
 
 const handleClickCard = () => {
-  router.push({name : 'RoutineDashboard'});
+  router.push({ name: 'RoutineDashboard' });
 }
 
 </script>
@@ -78,9 +76,10 @@ const handleClickCard = () => {
   border-radius: 24px;
   padding: 24px;
   width: 300px;
-  flex-shrink: 0;       /* para scroll horizontal */
+  flex-shrink: 0;
+  /* para scroll horizontal */
   color: white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -88,8 +87,8 @@ const handleClickCard = () => {
 }
 
 .tarjeta:hover {
-    background: linear-gradient(135deg, #34d399, #2858a7);
-    transform: scale(1.05);
+  background: linear-gradient(135deg, #34d399, #2858a7);
+  transform: scale(1.05);
 }
 
 /* Título */
@@ -121,19 +120,24 @@ const handleClickCard = () => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3); /* gris suave por defecto */
+  background: rgba(255, 255, 255, 0.3);
+  /* gris suave por defecto */
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   transition: all 0.3s;
-  border: 2px solid rgba(255, 255, 255, 0.4); /* borde sutil para que quede definido */
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  /* borde sutil para que quede definido */
 }
 
 .circulo.activo {
-  background: #10b981; /* verde sólido */
-  border: 2px solid #ffffff; /* borde blanco nítido */
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7); /* glow verde suave */
+  background: #10b981;
+  /* verde sólido */
+  border: 2px solid #ffffff;
+  /* borde blanco nítido */
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+  /* glow verde suave */
 }
 
 /* Barra de progreso */
@@ -149,7 +153,7 @@ const handleClickCard = () => {
 .barra-fondo {
   width: 100%;
   height: 12px;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   overflow: hidden;
 }

@@ -11,9 +11,71 @@ CREATE TABLE EXERCISE (
     CATEGORY VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE SEC_USER (
-    ID UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    USERNAME VARCHAR(50) unique NOT NULL,
-    PASSWORD VARCHAR(255) NOT NULL,
-    EMAIL VARCHAR(100) NOT NULL
+-- USERS TABLE
+CREATE TABLE sec_user (
+    id UUID PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    birth_date DATE,
+    email VARCHAR(100) UNIQUE,
+    weight DECIMAL(5,2),   -- in kg
+    height DECIMAL(5,2),   -- in cm
+    avatar VARCHAR(255)
 );
+
+-- TEMPLATE ROUTINES
+CREATE TABLE template_routine (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES sec_user(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT
+);
+CREATE INDEX idx_template_routine_user ON template_routine(user_id);
+
+-- CATALOG OF EXERCISES
+CREATE TABLE cat_exercise (
+    id UUID PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    main_muscle VARCHAR(50) NOT NULL,
+    involved_muscles TEXT[],  
+    equipment TEXT[],       
+    type VARCHAR(50),
+    difficulty INT CHECK (difficulty BETWEEN 1 AND 3)
+);
+
+-- TEMPLATE EXERCISES
+CREATE TABLE template_exercises (
+    id UUID PRIMARY KEY,
+    routine_id UUID NOT NULL REFERENCES template_routine(id),
+    exercise_id UUID NOT NULL REFERENCES cat_exercise(id),
+    num_series INT,
+    num_repeats INT
+);
+CREATE INDEX idx_template_exercises_routine ON template_exercises(routine_id);
+CREATE INDEX idx_template_exercises_exercise ON template_exercises(exercise_id);
+
+
+-- TRAINING SESSIONS
+CREATE TABLE training_session (
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES sec_user(id),
+    date DATE NOT NULL,
+    total_duration INT,        -- minutes
+    perceived_effort INT       -- scale 1-5
+);
+CREATE INDEX idx_training_session_user ON training_session(user_id);
+CREATE INDEX idx_training_session_date ON training_session(date);
+
+-- REALIZED EXERCISES
+CREATE TABLE exercise_done (
+    id UUID PRIMARY KEY,
+    session_id UUID NOT NULL REFERENCES training_session(id),
+    exercise_id UUID NOT NULL REFERENCES cat_exercise(id),
+    series INT,
+    repeats_per_series INT[],
+    weight_per_series DECIMAL(5,2)[],
+    comments TEXT
+);
+CREATE INDEX idx_exercise_done_session ON exercise_done(session_id);
+CREATE INDEX idx_exercise_done_exercise ON exercise_done(exercise_id);
+

@@ -6,9 +6,9 @@ import RutineCard from './Routine.vue';
 <template>
   <div class="dashboard">
     <MyWeekCardComponent />
-
-
-    <RutineCard/>
+    <RutineCard />
+    <RutineCard />
+    <RutineCard />
   </div>
 </template>
 
