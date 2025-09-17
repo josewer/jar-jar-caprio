@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import { exercisesRouter } from './routers/exercise-router.js';
 import { userRouter } from './routers/user-router.js';
 import { authRouter } from './routers/auth-router.js';
+import { routineRouter } from './routers/routine-router.js';
 import logger from 'morgan';
 import config from './config.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
@@ -25,7 +26,8 @@ app.use(express.static('public'));
 app.use('/auth', authRouter);
 app.use('/test_exercises', exercisesRouter);
 app.use('/exercises', exercisesRouter);
-app.use('/users', authMiddleware, userRouter);
+app.use('/users', userRouter);
+app.use('/routine', routineRouter)
 
 // Health
 app.get('/health', (req, res) => { return res.status(200).json({ status: 'OK' }); });

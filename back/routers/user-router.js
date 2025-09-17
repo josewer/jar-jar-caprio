@@ -5,7 +5,6 @@ export const userRouter = Router();
 
 const userController = new UserController();
 
-userRouter.post('/login', (req, res) => userController.login(req, res));
 userRouter.get('/', (req, res) => userController.get(req, res));
 userRouter.get('/:id', (req, res) => userController.getById(req, res));
 userRouter.post('/', (req, res) => userController.post(req, res));

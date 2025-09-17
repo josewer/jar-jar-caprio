@@ -6,13 +6,16 @@ const userSchema = z.object({
     .nonempty('Password is required.')
     .min(8, 'Password must have at least 8 characters.')
     .max(24, 'Password must have at most 24 characters.'),
-  email: z.email('Email is invalid').nonempty('Email is required.')
+  email: z.email('Email is invalid').nonempty('Email is required.'),
+  weight: z.number().positive('Weight must be positive'),
+  height: z.number().positive('Height must be positive'),
+  birth_date: z.date('Birth date must be a valid date'),
 });
 
-export function validate (object) {
+export function validate(object) {
   return userSchema.safeParse(object);
 }
 
-export function partialValidate (object) {
+export function partialValidate(object) {
   return userSchema.partial().safeParse(object);
 }
