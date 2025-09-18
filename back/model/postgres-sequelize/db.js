@@ -31,10 +31,10 @@ export const exerciseModel = sequelize.define('Exercise', {
     allowNull: false
   }
 },
-{
-  tableName: 'exercise',
-  timestamps: false // desactiva createdAt y updatedAt
-}
+  {
+    tableName: 'exercise',
+    timestamps: false // desactiva createdAt y updatedAt
+  }
 );
 
 
@@ -44,8 +44,8 @@ export const userModel = sequelize.define('user', {
   password: { type: DataTypes.STRING, allowNull: false },
   birth_date: { type: DataTypes.DATE },
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
-  weight: { type: DataTypes.DECIMAL(5,2) },
-  height: { type: DataTypes.DECIMAL(5,2) },
+  weight: { type: DataTypes.DECIMAL(5, 2) },
+  height: { type: DataTypes.DECIMAL(5, 2) },
   avatar: { type: DataTypes.STRING }
 }, {
   tableName: 'sec_user',
@@ -54,28 +54,32 @@ export const userModel = sequelize.define('user', {
 
 export const templateRoutineModel = sequelize.define('template_routine', {
   id: { type: DataTypes.UUID, primaryKey: true },
-  user_id: { type: DataTypes.UUID, allowNull: false },
+  userId: { type: DataTypes.UUID, allowNull: false, field: "user_id" },
   name: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.TEXT }
 }, {
   tableName: 'template_routine',
-  timestamps: false
+  timestamps: false,
+  defaultScope: {
+    attributes: { exclude: ['user_id'] }
+  }
 });
 
 
-export const templateExercisesModel = sequelize.define('template_exercises', {
+export const templateExercisesModel = sequelize.define('templateExercises', {
   id: { type: DataTypes.UUID, primaryKey: true },
-  routine_id: { type: DataTypes.UUID, allowNull: false },
-  exercise_id: { type: DataTypes.UUID, allowNull: false },
-  num_series: { type: DataTypes.INTEGER },
-  num_repeats: { type: DataTypes.INTEGER }
+  routineId: { type: DataTypes.UUID, allowNull: false, field: "routine_id" },
+  exerciseId: { type: DataTypes.UUID, allowNull: false, field: "exercise_id" },
+  numSeries: { type: DataTypes.INTEGER, field: "num_series" },
+  numRepeats: { type: DataTypes.INTEGER, field: "num_repeats" }
 }, {
   tableName: 'template_exercises',
-  timestamps: false
+  timestamps: false,
+  attributes: { exclude: ['routine_id', 'exercise_id', 'num_series', 'num_repeats'] }
 });
 
 
-export const catExerciseModel = sequelize.define('CAT_EXERCISES', {
+export const catExerciseModel = sequelize.define('exercise', {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
@@ -123,7 +127,7 @@ export const exerciseDoneModel = sequelize.define('exercise_done', {
   exercise_id: { type: DataTypes.UUID, allowNull: false },
   series: { type: DataTypes.INTEGER },
   repeats_per_series: { type: DataTypes.ARRAY(DataTypes.INTEGER) },
-  weight_per_series: { type: DataTypes.ARRAY(DataTypes.DECIMAL(5,2)) },
+  weight_per_series: { type: DataTypes.ARRAY(DataTypes.DECIMAL(5, 2)) },
   comments: { type: DataTypes.TEXT }
 }, {
   tableName: 'exercise_done',
@@ -150,7 +154,7 @@ templateRoutineModel.hasMany(templateExercisesModel, { foreignKey: 'routine_id' 
 templateExercisesModel.belongsTo(templateRoutineModel, { foreignKey: 'routine_id' });
 
 catExerciseModel.hasMany(templateExercisesModel, { foreignKey: 'exercise_id' });
-templateExercisesModel.belongsTo(catExerciseModel, { foreignKey: 'exercise_id' });
+templateExercisesModel.belongsTo(catExerciseModel, { foreignKey: 'exercise_id', as: 'exercise' } );
 
 userModel.hasMany(trainingSessionModel, { foreignKey: 'user_id' });
 trainingSessionModel.belongsTo(userModel, { foreignKey: 'user_id' });

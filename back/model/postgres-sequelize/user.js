@@ -5,7 +5,7 @@ import { AppError } from '../../errors/AppError.js';
 import { Op } from 'sequelize';
 
 export class User {
-  async get () {
+  async get() {
     return await userModel.findAll({
       attributes: {
         exclude: ['password']
@@ -13,17 +13,22 @@ export class User {
     });
   }
 
-  async getById ({ id }) {
+  async getById({ id }) {
     return await userModel.findByPk(id, {
       exclude: ['password']
     });
   }
 
-  async delete ({ id }) {
+  async exists({ id }) {
+    const count = await userModel.count({ where: { id } });
+    return count > 0;
+  }
+
+  async delete({ id }) {
     return await userModel.destroy({ where: { id } });
   }
 
-  async post ({ input }) {
+  async post({ input }) {
     const hashPass = await bcrypt.hash(input.password, Number(config.app.saltOrRounds));
     input.password = hashPass;
 
@@ -42,7 +47,7 @@ export class User {
     return userWithoutPassword;
   }
 
-  async put ({ id, input }) {
+  async put({ id, input }) {
     const exist = await userModel.count({
       where: {
         [Op.and]: [
@@ -74,7 +79,7 @@ export class User {
     return userWithoutPassword;
   }
 
-  async login ({ input }) {
+  async login({ input }) {
     const user = await userModel.findOne({
       where: { username: input.username }
     });

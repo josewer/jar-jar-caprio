@@ -9,6 +9,11 @@ export class Exercise {
     return await catExerciseModel.findByPk(id);
   }
 
+    async exists({ id }) {
+      const count = await catExerciseModel.count({ where: { id } });
+      return count > 0;
+    }
+
   async delete ({ id }) {
     return await catExerciseModel.destroy({ where: { id } });
   }

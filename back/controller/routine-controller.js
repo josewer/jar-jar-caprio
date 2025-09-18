@@ -49,11 +49,11 @@ export class RoutineController {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const user = await this.userModel.getById({ id: result.data.user_id });
+    const user = await this.userModel.exists({ id: result.data.userId });
     if (!user) { return res.status(400).json({ message: 'User does not exist' }); }
 
     try {
-      const routine = this.routineModel.post({ input: result.data })
+      const routine = await this.routineModel.post({ input: result.data })
       return res.status(201).json(routine);
     } catch (error) {
 
@@ -76,7 +76,7 @@ export class RoutineController {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const user = await this.userModel.getById({ id: result.data.user_id });
+    const user = await this.userModel.getById({ id: result.data.userId });
     if (!user) { return res.status(400).json({ message: 'User does not exist' }); }
 
     try {
@@ -89,9 +89,9 @@ export class RoutineController {
         return res.status(error.status).json(error);
       }
 
-      return res.status(404).json({
-        error: 'Not found.',
-        message: `User with id ${id} does not exist.`
+      return res.status(500).json({
+        error: 'Error.',
+        message: 'Unexpected error'
       });
     }
   }

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // Esquema para template_routine
 const routineSchema = z.object({
-  user_id: z.uuid('User ID must be a valid UUID')
+  userId: z.uuid('User ID must be a valid UUID')
     .nonempty('User ID is required'),
   name: z.string()
     .nonempty('Routine name is required')
