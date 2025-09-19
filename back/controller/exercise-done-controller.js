@@ -1,28 +1,29 @@
-import { partialValidate, validate } from '../schemas/routineSchema.js';
-import { User } from '../model/postgres-sequelize/user.js';
-import { Routine } from '../model/postgres-sequelize/routine.js';
+import { partialValidate, validate } from '../schemas/exerciseDoneSchema.js';
+import { ExerciseDone } from '../model/postgres-sequelize/exerciseDone.js';
 import { AppError } from '../errors/AppError.js';
 
-export class RoutineController {
-  userModel = new User();
-  routineModel = new Routine();
+export class ExerciseDoneController {
+
+  exerciseDoneModel = new ExerciseDone();
 
   async get(req, res) {
-    const routines = await this.routineModel.get();
-    return res.status(200).json(routines);
+    const sessionId = req.params.sessionId;
+    const exerciseDone = await this.exerciseDoneModel.get({sessionId});
+    return res.status(200).json(exerciseDone);
   }
 
   async getById(req, res) {
     const id = req.params.id;
+    const sessionId = req.params.sessionId;
 
-    const routine = await this.routineModel.getById({ id });
+    const exerciseDone = await this.exerciseDoneModel.getById({ id , sessionId});
 
-    if (routine) {
-      return res.status(200).json(routine);
+    if (exerciseDone) {
+      return res.status(200).json(exerciseDone);
     } else {
       return res.status(404).json({
         error: 'Not found',
-        message: `Routine with id ${id} does not exist`
+        message: `Exercise done with id ${id} does not exist`
       });
     }
   }
@@ -30,32 +31,31 @@ export class RoutineController {
   async delete(req, res) {
     const id = req.params.id;
 
-    const deleted = await this.routineModel.delete({ id });
+    const deleted = await this.exerciseDoneModel.delete({ id , sessionId });
 
     if (deleted) {
       return res.status(204).send();
     } else {
       return res.status(404).json({
         error: 'Not found.',
-        message: `Routine with id ${id} does not exist.`
+        message: `Exercise done with id ${id} does not exist.`
       });
     }
   }
 
   async post(req, res) {
     const result = validate(req.body);
+    const sessionId = req.params.sessionId;
 
-    const userId = req.user.id;
-    
     if (!result.success) {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
     try {
-      const routine = await this.routineModel.post({ input: {...result.data , userId  }})
-      return res.status(201).json(routine);
+      const exerciseDone = await this.exerciseDoneModel.post({ input: result.data , sessionId })
+      return res.status(201).json(exerciseDone);
     } catch (error) {
-
+      console.error(error)
       if (error instanceof AppError) {
         return res.status(error.status).json(error);
       }
@@ -70,17 +70,15 @@ export class RoutineController {
   async put(req, res) {
     const result = partialValidate(req.body);
     const id = req.params.id;
+    const sessionId = req.params.sessionId;
 
     if (!result.success) {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const user = await this.userModel.getById({ id: result.data.userId });
-    if (!user) { return res.status(400).json({ message: 'User does not exist' }); }
-
     try {
-      const routine = await this.routineModel.put({ id, input: result.data });
-      return res.status(200).json(routine); 
+      const exerciseDone = await this.exerciseDoneModel.put({ id, input: result.data , sessionId});
+      return res.status(200).json(exerciseDone);
     } catch (error) {
       console.error(error);
 

@@ -1,0 +1,46 @@
+### Get all session
+GET http://localhost:3000/session/ HTTP/1.1
+
+### Get an session by id
+GET http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94 HTTP/1.1
+
+### update an session
+PUT  http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId" : "4e2caf41-5354-4ecd-bd1b-03e1869615be",
+    "perceivedEffort" : 5
+}
+
+### finished an session
+PUT  http://localhost:3000/session/finished/583a0ef9-8993-47a9-9379-679505450e94 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId" : "4e2caf41-5354-4ecd-bd1b-03e1869615be",
+    "perceivedEffort" : 5
+}
+
+### Remove an session by id
+DELETE  http://localhost:3000/session/aef5921b-f910-4499-8e25-ffe3b69ab885 HTTP/1.1
+
+
+### Create an session
+POST   http://localhost:3000/session/ HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZhbmEiLCJlbWFpbCI6Impvc2VAZ21haWwuY29tIiwianRpIjoiOTNhNmFkYTEtN2FmMy00NDZhLTkyZGUtMTc4Njk3ZWY0YTU0IiwiaWF0IjoxNzU3NTg2OTcyLCJleHAiOjE3NTc1OTA1NzJ9.iXaUSYZsrTM71cR08Puh-E2RftJw_D37W6gXmcl97DU
+
+{
+    "userId" : "4e2caf41-5354-4ecd-bd1b-03e1869615be",
+    "startDate": "2025-09-19T14:30:00.000Z"
+}
+
+### Start an session
+POST   http://localhost:3000/session/start HTTP/1.1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpbHZhbmEiLCJlbWFpbCI6Impvc2VAZ21haWwuY29tIiwianRpIjoiOTNhNmFkYTEtN2FmMy00NDZhLTkyZGUtMTc4Njk3ZWY0YTU0IiwiaWF0IjoxNzU3NTg2OTcyLCJleHAiOjE3NTc1OTA1NzJ9.iXaUSYZsrTM71cR08Puh-E2RftJw_D37W6gXmcl97DU
+
+{
+    "userId" : "4e2caf41-5354-4ecd-bd1b-03e1869615be"
+}

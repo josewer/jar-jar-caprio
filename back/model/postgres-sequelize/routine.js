@@ -10,7 +10,7 @@ export class Routine {
       include: [
         {
           model: templateExercisesModel,
-                attributes: ['id', 'numSeries' , 'numRepeats'],
+          attributes: ['id', 'numSeries', 'numRepeats'],
           include: [
             {
               model: catExerciseModel,

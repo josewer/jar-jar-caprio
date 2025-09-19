@@ -121,13 +121,13 @@ export const catExerciseModel = sequelize.define('exercise', {
 });
 
 
-export const exerciseDoneModel = sequelize.define('exercise_done', {
+export const exerciseDoneModel = sequelize.define('exercisesDone', {
   id: { type: DataTypes.UUID, primaryKey: true },
-  session_id: { type: DataTypes.UUID, allowNull: false },
-  exercise_id: { type: DataTypes.UUID, allowNull: false },
+  sessionId: { type: DataTypes.UUID, allowNull: false, field: 'session_id' },
+  exerciseId: { type: DataTypes.UUID, allowNull: false, field: 'exercise_id' },
   series: { type: DataTypes.INTEGER },
-  repeats_per_series: { type: DataTypes.ARRAY(DataTypes.INTEGER) },
-  weight_per_series: { type: DataTypes.ARRAY(DataTypes.DECIMAL(5, 2)) },
+  repeatsPerSeries: { type: DataTypes.ARRAY(DataTypes.INTEGER), field: 'repeats_per_series' },
+  weightPerSeries: { type: DataTypes.ARRAY(DataTypes.DECIMAL(5, 2)), field: 'weight_per_series' },
   comments: { type: DataTypes.TEXT }
 }, {
   tableName: 'exercise_done',
@@ -137,10 +137,11 @@ export const exerciseDoneModel = sequelize.define('exercise_done', {
 
 export const trainingSessionModel = sequelize.define('training_session', {
   id: { type: DataTypes.UUID, primaryKey: true },
-  user_id: { type: DataTypes.UUID, allowNull: false },
-  date: { type: DataTypes.DATEONLY, allowNull: false },
-  total_duration: { type: DataTypes.INTEGER }, // minutes
-  perceived_effort: { type: DataTypes.INTEGER } // 1-5
+  userId: { type: DataTypes.UUID, allowNull: false, field: 'user_id' },
+  startDate: { type: DataTypes.DATE, allowNull: false, field: 'start_date' },
+  endDate: { type: DataTypes.DATE, field: 'end_date' },
+  totalDuration: { type: DataTypes.INTEGER, field: 'total_duration' }, // minutes
+  perceivedEffort: { type: DataTypes.INTEGER, field: 'perceived_effort' } // 1-5
 }, {
   tableName: 'training_session',
   timestamps: false
@@ -154,12 +155,12 @@ templateRoutineModel.hasMany(templateExercisesModel, { foreignKey: 'routine_id' 
 templateExercisesModel.belongsTo(templateRoutineModel, { foreignKey: 'routine_id' });
 
 catExerciseModel.hasMany(templateExercisesModel, { foreignKey: 'exercise_id' });
-templateExercisesModel.belongsTo(catExerciseModel, { foreignKey: 'exercise_id', as: 'exercise' } );
+templateExercisesModel.belongsTo(catExerciseModel, { foreignKey: 'exercise_id', as: 'exercise' });
 
 userModel.hasMany(trainingSessionModel, { foreignKey: 'user_id' });
 trainingSessionModel.belongsTo(userModel, { foreignKey: 'user_id' });
 
-trainingSessionModel.hasMany(exerciseDoneModel, { foreignKey: 'session_id' });
+trainingSessionModel.hasMany(exerciseDoneModel, { foreignKey: 'session_id', as: 'exercisesDone' });
 exerciseDoneModel.belongsTo(trainingSessionModel, { foreignKey: 'session_id' });
 
 catExerciseModel.hasMany(exerciseDoneModel, { foreignKey: 'exercise_id' });

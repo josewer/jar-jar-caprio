@@ -79,3 +79,12 @@ CREATE TABLE exercise_done (
 CREATE INDEX idx_exercise_done_session ON exercise_done(session_id);
 CREATE INDEX idx_exercise_done_exercise ON exercise_done(exercise_id);
 
+
+ALTER TABLE training_session
+  RENAME COLUMN date TO start_date;
+
+ALTER TABLE training_session
+  ALTER COLUMN start_date TYPE TIMESTAMP USING start_date::timestamp;
+
+ALTER TABLE training_session
+  ADD COLUMN end_date TIMESTAMP;

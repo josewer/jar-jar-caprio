@@ -1,4 +1,4 @@
-import { partialValidate, validate } from '../schemas/routineExercisesSchema.js';
+import { partialValidate, validate, validateParams } from '../schemas/routineExercisesSchema.js';
 import { RoutineExercises } from '../model/postgres-sequelize/routineExercises.js';
 
 import { Routine } from '../model/postgres-sequelize/routine.js';
@@ -14,14 +14,15 @@ export class RoutineExercisesController {
 
     const routineId = req.params.routineId;
 
-    const routinesExercise = await this.routineExercisesModel.get({routineId});
+    const routinesExercise = await this.routineExercisesModel.get({ routineId });
     return res.status(200).json(routinesExercise);
   }
 
   async getById(req, res) {
     const id = req.params.id;
+    const routineId = req.params.routineId;
 
-    const routinesExercise = await this.routineExercisesModel.getById({ id });
+    const routinesExercise = await this.routineExercisesModel.getById({ id, routineId });
 
     if (routinesExercise) {
       return res.status(200).json(routinesExercise);
@@ -35,8 +36,9 @@ export class RoutineExercisesController {
 
   async delete(req, res) {
     const id = req.params.id;
+    const routineId = req.params.routineId;
 
-    const deleted = await this.routineExercisesModel.delete({ id });
+    const deleted = await this.routineExercisesModel.delete({ id, routineId });
 
     if (deleted) {
       return res.status(204).send();
@@ -49,20 +51,26 @@ export class RoutineExercisesController {
   }
 
   async post(req, res) {
+
+    const routineId = req.params.routineId;
+
+    const resultParam = validateParams({ routineId });
+    if (!resultParam.success) { return res.status(400).json(JSON.parse(resultParam.error.message)); }
+
     const result = validate(req.body);
 
     if (!result.success) {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const routine = await this.routineModel.exists({ id: result.data.routineId });
+    const routine = await this.routineModel.exists({ id: routineId });
     if (!routine) { return res.status(400).json({ message: 'Routine does not exist' }); }
 
     const exercise = await this.exerciseModel.exists({ id: result.data.exerciseId });
     if (!exercise) { return res.status(400).json({ message: 'Exercise does not exist' }); }
 
     try {
-      const routineExercise = await this.routineExercisesModel.post({ input: result.data })
+      const routineExercise = await this.routineExercisesModel.post({ input: result.data, routineId })
       return res.status(201).json(routineExercise);
     } catch (error) {
 
@@ -81,19 +89,26 @@ export class RoutineExercisesController {
     const result = partialValidate(req.body);
     const id = req.params.id;
 
+    const routineId = req.params.routineId;
+
+    const resultParam = validateParams({ routineId });
+    if (!resultParam.success) { return res.status(400).json(JSON.parse(resultParam.error.message)); }
+
+
     if (!result.success) {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-
-    const routine = await this.routineModel.exists({ id: result.data.routineId });
+    const routine = await this.routineModel.exists({ id: routineId });
     if (!routine) { return res.status(400).json({ message: 'Routine does not exist' }); }
 
-    const exercise = await this.exerciseModel.exists({ id: result.data.exerciseId });
-    if (!exercise) { return res.status(400).json({ message: 'Exercise does not exist' }); }
+    if (result.data.exerciseId) {
+      const exercise = await this.exerciseModel.exists({ id: result.data.exerciseId });
+      if (!exercise) { return res.status(400).json({ message: 'Exercise does not exist' }); }
+    }
 
     try {
-      const routineExercise = await this.routineExercisesModel.put({ id, input: result.data });
+      const routineExercise = await this.routineExercisesModel.put({ id, input: result.data, routineId });
       return res.status(200).json(routineExercise);
     } catch (error) {
       console.error(error);

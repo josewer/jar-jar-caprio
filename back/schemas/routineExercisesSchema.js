@@ -1,8 +1,12 @@
 import { z } from 'zod';
 
-const routineExerciseSchema = z.object({
+const routineExerciseParamsSchema = z.object({
   routineId: z.uuid('Routine ID must be a valid UUID')
-    .nonempty('Routine ID is required'),
+    .nonempty('Routine ID is required')
+});
+
+const routineExerciseSchema = z.object({
+
   exerciseId: z.uuid('Exercise ID must be a valid UUID')
     .nonempty('Exercise ID is required'),
   numSeries: z
@@ -17,6 +21,10 @@ const routineExerciseSchema = z.object({
 
 export function validate(object) {
   return routineExerciseSchema.safeParse(object);
+}
+
+export function validateParams(object) {
+  return routineExerciseParamsSchema.safeParse(object);
 }
 
 export function partialValidate(object) {

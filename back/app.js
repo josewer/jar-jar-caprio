@@ -3,6 +3,7 @@ import { exercisesRouter } from './routers/exercise-router.js';
 import { userRouter } from './routers/user-router.js';
 import { authRouter } from './routers/auth-router.js';
 import { routineRouter } from './routers/routine-router.js';
+import { sessionRouter } from './routers/session-router.js';
 import logger from 'morgan';
 import config from './config.js';
 import { authMiddleware } from './middlewares/authMiddleware.js';
@@ -27,7 +28,8 @@ app.use('/auth', authRouter);
 app.use('/test_exercises', exercisesRouter);
 app.use('/exercises', exercisesRouter);
 app.use('/users', userRouter);
-app.use('/routine', routineRouter)
+app.use('/routine', authMiddleware  ,routineRouter);
+app.use('/session', sessionRouter);
 
 
 // Health
