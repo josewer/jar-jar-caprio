@@ -13,16 +13,18 @@ export class RoutineExercisesController {
   async get(req, res) {
 
     const routineId = req.params.routineId;
+    const userId = req.user.id;
 
-    const routinesExercise = await this.routineExercisesModel.get({ routineId });
+    const routinesExercise = await this.routineExercisesModel.get({ routineId, userId });
     return res.status(200).json(routinesExercise);
   }
 
   async getById(req, res) {
     const id = req.params.id;
     const routineId = req.params.routineId;
+    const userId = req.user.id;
 
-    const routinesExercise = await this.routineExercisesModel.getById({ id, routineId });
+    const routinesExercise = await this.routineExercisesModel.getById({ id, routineId, userId });
 
     if (routinesExercise) {
       return res.status(200).json(routinesExercise);
@@ -37,8 +39,9 @@ export class RoutineExercisesController {
   async delete(req, res) {
     const id = req.params.id;
     const routineId = req.params.routineId;
+    const userId = req.user.id;
 
-    const deleted = await this.routineExercisesModel.delete({ id, routineId });
+    const deleted = await this.routineExercisesModel.delete({ id, routineId, userId });
 
     if (deleted) {
       return res.status(204).send();
@@ -53,6 +56,7 @@ export class RoutineExercisesController {
   async post(req, res) {
 
     const routineId = req.params.routineId;
+    const userId = req.user.id;
 
     const resultParam = validateParams({ routineId });
     if (!resultParam.success) { return res.status(400).json(JSON.parse(resultParam.error.message)); }
@@ -63,7 +67,7 @@ export class RoutineExercisesController {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const routine = await this.routineModel.exists({ id: routineId });
+    const routine = await this.routineModel.exists({ id: routineId, userId });
     if (!routine) { return res.status(400).json({ message: 'Routine does not exist' }); }
 
     const exercise = await this.exerciseModel.exists({ id: result.data.exerciseId });
@@ -88,6 +92,7 @@ export class RoutineExercisesController {
   async put(req, res) {
     const result = partialValidate(req.body);
     const id = req.params.id;
+    const userId = req.user.id;
 
     const routineId = req.params.routineId;
 
@@ -99,7 +104,7 @@ export class RoutineExercisesController {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const routine = await this.routineModel.exists({ id: routineId });
+    const routine = await this.routineModel.exists({ id: routineId, userId });
     if (!routine) { return res.status(400).json({ message: 'Routine does not exist' }); }
 
     if (result.data.exerciseId) {

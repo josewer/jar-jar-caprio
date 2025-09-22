@@ -1,16 +1,17 @@
-import { trainingSessionModel, catExerciseModel , exerciseDoneModel } from './db.js';
+import { trainingSessionModel, catExerciseModel, exerciseDoneModel } from './db.js';
 
 export class Session {
-  async get() {
+  async get({ userId }) {
     return await trainingSessionModel.findAll({
+      where: { userId },
       attributes: ['id', 'userId', 'startDate', 'endDate', 'totalDuration', 'perceivedEffort']
     });
   }
 
-  async getById({ id }) {
+  async getById({ id, userId }) {
     return await trainingSessionModel.findByPk(id, {
+      where: { userId },
       attributes: ['id', 'userId', 'startDate', 'endDate', 'totalDuration', 'perceivedEffort'],
-
       include: [{
         attributes: ['id', 'sessionId', 'exerciseId', 'series', 'repeatsPerSeries', 'weightPerSeries', 'comments'],
         model: exerciseDoneModel,
@@ -26,14 +27,14 @@ export class Session {
     });
   }
 
-  async exists({ id }) {
-    const count = await trainingSessionModel.count({ where: { id } });
+  async exists({ id, userId }) {
+    const count = await trainingSessionModel.count({ where: { id, userId } });
     return count > 0;
   }
 
 
-  async delete({ id }) {
-    return await trainingSessionModel.destroy({ where: { id } });
+  async delete({ id, userId }) {
+    return await trainingSessionModel.destroy({ where: { id, userId } });
   }
 
   async post({ input }) {
@@ -46,7 +47,7 @@ export class Session {
   async put({ id, input }) {
     const [numberOfAffectedRows, [updatedSession]] = await trainingSessionModel.update(
       { ...input },
-      { where: { id }, returning: true }
+      { where: { id, userId: input.userId }, returning: true }
     );
 
     if (numberOfAffectedRows === 0) {

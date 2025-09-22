@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Remove an routine by id
-DELETE http://localhost:3000/routine/31995951-cb1f-44e2-8485-73783552f75e/exercises/65c2c6e3-aafa-4880-afee-53f0f433e95e HTTP/1.1
+DELETE http://localhost:3000/routine/31995951-cb1f-44e2-8485-73783552f75e/exercises/ec07a666-fba3-4798-acd9-30965c2b390f HTTP/1.1
 
 
 ### Create an routine

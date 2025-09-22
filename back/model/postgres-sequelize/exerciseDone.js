@@ -1,18 +1,28 @@
-import { exerciseDoneModel, catExerciseModel } from './db.js';
+import { exerciseDoneModel, catExerciseModel, trainingSessionModel } from './db.js';
 
 export class ExerciseDone {
-  async get({ sessionId }) {
+  async get({ sessionId, userId }) {
     return await exerciseDoneModel.findAll({
-      where: { sessionId },
-      attributes: ['id', 'sessionId', 'exerciseId', 'series', 'repeatsPerSeries', 'weightPerSeries', 'comments']
+      attributes: ['id', 'sessionId', 'exerciseId', 'series', 'repeatsPerSeries', 'weightPerSeries', 'comments'],
+      include: [
+        {
+          model: trainingSessionModel,
+          where: { id: sessionId, userId },
+          attributes: []
+        }
+      ]
     });
   }
 
-  async getById({ id, sessionId }) {
+  async getById({ id, sessionId, userId }) {
     return await exerciseDoneModel.findByPk(id, {
-      where: { sessionId },
       attributes: ['id', 'sessionId', 'exerciseId', 'series', 'repeatsPerSeries', 'weightPerSeries', 'comments'],
       include: [
+        {
+          model: trainingSessionModel,
+          where: { id: sessionId, userId },
+          attributes: []
+        },
         {
           model: catExerciseModel,
           as: 'exercise',
@@ -22,14 +32,32 @@ export class ExerciseDone {
     });
   }
 
-  async exists({ id, sessionId }) {
-    const count = await exerciseDoneModel.count({ where: { id, sessionId } });
+  async exists({ id, sessionId, userId }) {
+    const count = await exerciseDoneModel.count({
+      where: { id },
+      include: [
+        {
+          model: trainingSessionModel,
+          where: { id: sessionId, userId },
+          attributes: []
+        }
+      ]
+    });
     return count > 0;
   }
 
 
-  async delete({ id, sessionId }) {
-    return await exerciseDoneModel.destroy({ where: { id, sessionId } });
+  async delete({ id, sessionId, userId }) {
+    return await exerciseDoneModel.destroy({
+      where: { id }
+      , include: [
+        {
+          model: trainingSessionModel,
+          where: { id: sessionId, userId },
+          attributes: []
+        }
+      ]
+    });
   }
 
 
@@ -41,10 +69,20 @@ export class ExerciseDone {
     });
   }
 
-  async put({ id, input, sessionId }) {
+  async put({ id, input, sessionId, userId }) {
     const [numberOfAffectedRows, [updatedExerciseDone]] = await exerciseDoneModel.update(
       { ...input },
-      { where: { id, sessionId }, returning: true }
+      {
+        where: { id },
+        include: [
+          {
+            model: trainingSessionModel,
+            where: { id: sessionId, userId },
+            attributes: []
+          }
+        ]
+        , returning: true
+      }
     );
 
     if (numberOfAffectedRows === 0) {

@@ -1,12 +1,15 @@
 import { templateRoutineModel, templateExercisesModel, catExerciseModel } from './db.js';
 
 export class Routine {
-  async get() {
-    return await templateRoutineModel.findAll();
+  async get({ userId }) {
+    return await templateRoutineModel.findAll({
+      where: { userId }
+    });
   }
 
-  async getById({ id }) {
+  async getById({ id, userId }) {
     return await templateRoutineModel.findByPk(id, {
+      where: { userId },
       include: [
         {
           model: templateExercisesModel,
@@ -22,14 +25,14 @@ export class Routine {
     });
   }
 
-  async exists({ id }) {
-    const count = await templateRoutineModel.count({ where: { id } });
+  async exists({ id, userId }) {
+    const count = await templateRoutineModel.count({ where: { id, userId } });
     return count > 0;
   }
 
 
-  async delete({ id }) {
-    return await templateRoutineModel.destroy({ where: { id } });
+  async delete({ id, userId }) {
+    return await templateRoutineModel.destroy({ where: { id, userId } });
   }
 
   async post({ input }) {
@@ -40,15 +43,15 @@ export class Routine {
   }
 
   async put({ id, input }) {
-    const [numberOfAffectedRows, [updatedExercise]] = await templateRoutineModel.update(
+    const [numberOfAffectedRows, [updatedRoutine]] = await templateRoutineModel.update(
       { ...input },
-      { where: { id }, returning: true }
+      { where: { id, userId: input.userId }, returning: true }
     );
 
     if (numberOfAffectedRows === 0) {
       return false;
     }
 
-    return updatedExercise;
+    return updatedRoutine;
   }
 }

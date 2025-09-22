@@ -1,21 +1,21 @@
 import { partialValidate, validate } from '../schemas/routineSchema.js';
-import { User } from '../model/postgres-sequelize/user.js';
 import { Routine } from '../model/postgres-sequelize/routine.js';
 import { AppError } from '../errors/AppError.js';
 
 export class RoutineController {
-  userModel = new User();
+
   routineModel = new Routine();
 
   async get(req, res) {
-    const routines = await this.routineModel.get();
+    const userId = req.user.id;
+    const routines = await this.routineModel.get({ userId });
     return res.status(200).json(routines);
   }
 
   async getById(req, res) {
     const id = req.params.id;
-
-    const routine = await this.routineModel.getById({ id });
+    const userId = req.user.id;
+    const routine = await this.routineModel.getById({ id, userId });
 
     if (routine) {
       return res.status(200).json(routine);
@@ -29,8 +29,8 @@ export class RoutineController {
 
   async delete(req, res) {
     const id = req.params.id;
-
-    const deleted = await this.routineModel.delete({ id });
+    const userId = req.user.id;
+    const deleted = await this.routineModel.delete({ id, userId });
 
     if (deleted) {
       return res.status(204).send();
@@ -44,15 +44,14 @@ export class RoutineController {
 
   async post(req, res) {
     const result = validate(req.body);
-
     const userId = req.user.id;
-    
+
     if (!result.success) {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
     try {
-      const routine = await this.routineModel.post({ input: {...result.data , userId  }})
+      const routine = await this.routineModel.post({ input: { ...result.data, userId } })
       return res.status(201).json(routine);
     } catch (error) {
 
@@ -70,17 +69,15 @@ export class RoutineController {
   async put(req, res) {
     const result = partialValidate(req.body);
     const id = req.params.id;
+    const userId = req.user.id;
 
     if (!result.success) {
       return res.status(400).json(JSON.parse(result.error.message));
     }
 
-    const user = await this.userModel.getById({ id: result.data.userId });
-    if (!user) { return res.status(400).json({ message: 'User does not exist' }); }
-
     try {
-      const routine = await this.routineModel.put({ id, input: result.data });
-      return res.status(200).json(routine); 
+      const routine = await this.routineModel.put({ id, input: { ...result.data, userId } });
+      return res.status(200).json(routine);
     } catch (error) {
       console.error(error);
 

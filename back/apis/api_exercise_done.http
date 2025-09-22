@@ -5,17 +5,16 @@ GET http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-
 GET  http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-done/60210847-fa43-4a20-8e1f-d36ddff14886 HTTP/1.1
 
 ### update an session
-PUT   http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-done HTTP/1.1
+PUT   http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-done/60210847-fa43-4a20-8e1f-d36ddff14886 HTTP/1.1
 Content-Type: application/json
 
 {
-    "userId" : "4e2caf41-5354-4ecd-bd1b-03e1869615be",
-    "perceivedEffort" : 5
+    "series" : 5
 }
 
 
 ### Remove an session by id
-DELETE  http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-done HTTP/1.1
+DELETE  http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-done/077c5b83-13be-4e5f-bf41-8364aea4b453 HTTP/1.1
 
 ### Create an session
 POST  http://localhost:3000/session/583a0ef9-8993-47a9-9379-679505450e94/exercise-done HTTP/1.1

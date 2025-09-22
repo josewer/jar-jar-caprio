@@ -25,11 +25,11 @@ app.use(express.static('public'));
 
 // Paths routers
 app.use('/auth', authRouter);
-app.use('/test_exercises', exercisesRouter);
-app.use('/exercises', exercisesRouter);
-app.use('/users', userRouter);
-app.use('/routine', authMiddleware  ,routineRouter);
-app.use('/session', sessionRouter);
+app.use('/test_exercises', authMiddleware, exercisesRouter);
+app.use('/exercises', authMiddleware, exercisesRouter);
+app.use('/users', authMiddleware, userRouter);
+app.use('/routine', authMiddleware, routineRouter);
+app.use('/session', authMiddleware, sessionRouter);
 
 
 // Health

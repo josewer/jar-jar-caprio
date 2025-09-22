@@ -7,7 +7,6 @@ const dateSchema = z.coerce.date({
 });
 
 const routineExerciseSchema = z.object({
-  userId: z.uuid("User ID must be a valid UUID"),
   startDate: dateSchema,
   endDate: dateSchema.optional(),
   totalDuration: z

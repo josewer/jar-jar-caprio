@@ -1,35 +1,63 @@
-import { templateExercisesModel, catExerciseModel } from './db.js';
+import { where } from 'sequelize';
+import { templateExercisesModel, catExerciseModel, templateRoutineModel } from './db.js';
 
 export class RoutineExercises {
-  async get({ routineId }) {
+  async get({ routineId, userId }) {
     return await templateExercisesModel.findAll({
-      where: { routineId },
-      attributes: ['id', 'routineId', 'exerciseId', 'numSeries', 'numRepeats']
+      attributes: ['id', 'routineId', 'exerciseId', 'numSeries', 'numRepeats'],
+      include: [
+        {
+          model: templateRoutineModel,
+          where: { id: routineId, userId },
+          attributes: []
+        }
+      ]
     });
   }
 
-  async getById({ id, routineId }) {
+  async getById({ id, routineId, userId }) {
     return await templateExercisesModel.findByPk(id, {
-      where: { routineId },
       attributes: ['id', 'routineId', 'exerciseId', 'numSeries', 'numRepeats'],
       include: [
         {
           model: catExerciseModel,
           as: 'exercise',
           attributes: ['id', 'name', 'mainMuscle', 'difficulty', 'involvedMuscles', 'equipment']
+        }, {
+          model: templateRoutineModel,
+          where: { id: routineId, userId },
+          attributes: []
         }
       ]
     });
   }
 
-  async exists({ id }) {
-    const count = await templateExercisesModel.count({ where: { id } });
+  async exists({ id, routineId, userId }) {
+    const count = await templateExercisesModel.count({
+      where: { id },
+      include: [
+        {
+          model: templateRoutineModel,
+          where: { id: routineId, userId },
+          attributes: []
+        }
+      ]
+    });
     return count > 0;
   }
 
 
-  async delete({ id , routineId }) {
-    return await templateExercisesModel.destroy({ where: { id , routineId} });
+  async delete({ id, routineId , userId }) {
+    return await templateExercisesModel.destroy({
+      where: { id }
+      , include: [
+        {
+          model: templateRoutineModel,
+          where: { id: routineId, userId },
+          attributes: []
+        }
+      ]
+    });
   }
 
   async post({ input, routineId }) {
