@@ -88,3 +88,6 @@ ALTER TABLE training_session
 
 ALTER TABLE training_session
   ADD COLUMN end_date TIMESTAMP;
+
+ALTER TABLE cat_exercise
+  ADD COLUMN description TEXT;

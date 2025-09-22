@@ -7,6 +7,7 @@ import LoginComponent from "../views/LoginComponent.vue";
 import { useAuthStore } from "../stores/auth";
 import { ToastCumtom } from "../../utils/toast";
 import RoutineDashBoard from "../components/RoutineDashBoard.vue";
+import TablaDemo from "../components/TablaDemo.vue";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -23,7 +24,7 @@ export const router = createRouter({
         {
             path: "/",
             name: "Home",
-            component: HomeComponent
+            component: TablaDemo
         },
         {
             path: "/info",

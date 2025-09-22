@@ -114,6 +114,9 @@ export const catExerciseModel = sequelize.define('exercise', {
   equipment: {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT
   }
 }, {
   tableName: 'cat_exercise', // minúscula y plural es lo estándar

@@ -6,7 +6,7 @@ import { router } from "../router";
 import { ToastCumtom } from '../../utils/toast';
 
 const input = ref({
-    username: 'silvana',
+    username: 'admin',
     password: '12345678'
 })
 
