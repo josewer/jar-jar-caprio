@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useExerciseStore } from '../stores/exercise';
+import FilterExercise from './FilterExercise.vue'
+import HeaderComponent from './HeaderComponent.vue'
 
 const exerciseStore = useExerciseStore();
 
@@ -70,10 +72,14 @@ const difficultyGradient = computed(() => {
 </script>
 
 <template>
+
+  <HeaderComponent />
+  <FilterExercise />
+
   <div class="exercise-selector">
     <!-- GRID DE EJERCICIOS -->
     <div class="grid">
-      <div v-for="exercise in filteredExercises" :key="exercise.id" class="card"  @click="openModal(exercise)"
+      <div v-for="exercise in filteredExercises" :key="exercise.id" class="card" @click="openModal(exercise)"
         @mouseenter="hoveredExerciseId = exercise.id" @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
           <img :src="hoveredExerciseId === exercise.id
@@ -109,8 +115,8 @@ const difficultyGradient = computed(() => {
         </div>
 
         <div class="modal-section">
-          <h4>Muscles Involved</h4>
-          <p>{{ modalExercise.involvedMuscles.join(', ') }}</p>
+          <h4>Musculos involucrados</h4>
+          <p>{{ modalExercise.involvedMuscles.length === 0 ? 'Todos' : modalExercise.involvedMuscles.join(', ') }}</p>
         </div>
 
         <div class="modal-section">
@@ -118,10 +124,7 @@ const difficultyGradient = computed(() => {
           <p>{{ modalExercise.equipment.length === 0 ? 'Ninguno' : modalExercise.equipment.join(', ') }}</p>
         </div>
 
-        <div class="modal-section">
-          <h4>Dificultad</h4>
-          <p>{{ modalExercise.difficulty }}/3</p>
-        </div>
+
       </div>
     </div>
   </div>
@@ -222,7 +225,7 @@ const difficultyGradient = computed(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1;
 }
 
 .modal {
@@ -246,7 +249,7 @@ const difficultyGradient = computed(() => {
 
 .modal-title {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 70px;
   margin: 0;
 }
 
@@ -317,6 +320,7 @@ const difficultyGradient = computed(() => {
 .close-btn:hover {
   background: rgba(255, 255, 255, 0.3);
 }
+
 
 @keyframes modalAppear {
   from {
