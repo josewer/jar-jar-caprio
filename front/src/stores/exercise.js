@@ -8,6 +8,7 @@ import { ExerciseType } from "../enums/ExerciseType";
 export const useExerciseStore = defineStore("exercise", () => {
 
     const exercises = ref([])
+    const exercise = ref([])
     const END_POINT = '/exercises';
 
     const create = async (exercise) => {
@@ -44,8 +45,8 @@ export const useExerciseStore = defineStore("exercise", () => {
     const getById = async (id) => {
         try {
             const response = await api.get(`${END_POINT}/${id}`);
-            save([response.data]);
-            return response.data;
+            save(response.data, true);
+            return exercise.value;
         } catch (error) {
             throw error;
         }
@@ -71,18 +72,30 @@ export const useExerciseStore = defineStore("exercise", () => {
         }
     };
 
-    const save = (data) => {
-        exercises.value = data.map(exercise => ({
-            ...exercise,
-            mainMuscle: Categories[exercise.mainMuscle] || exercise.mainMuscle,
-            type: ExerciseType[exercise.type] || exercise.type,
-            involvedMuscles: exercise.involvedMuscles.map(m => Muscles[m] || m)
-        }))
+    const save = (data, isOne = false) => {
 
-        exercises.value.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+
+        if (!isOne) {
+            exercises.value = data.map(exercise => ({
+                ...exercise,
+                mainMuscle: Categories[exercise.mainMuscle] || exercise.mainMuscle,
+                type: ExerciseType[exercise.type] || exercise.type,
+            }))
+
+            exercises.value.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+        }
+        else {
+            exercise.value = {
+                ...data
+                , mainMuscle: Categories[data.mainMuscle] || data.mainMuscle
+                , type: ExerciseType[data.type] || data.type
+                , involvedMuscles: data.involvedMuscles.map(m => Muscles[m] || m)
+            }
+        }
     }
 
     return {
+        exercise,
         exercises,
         search,
         create,

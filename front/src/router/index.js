@@ -7,7 +7,8 @@ import LoginComponent from "../views/LoginComponent.vue";
 import { useAuthStore } from "../stores/auth";
 import { ToastCumtom } from "../../utils/toast";
 import RoutineDashBoard from "../components/RoutineDashBoard.vue";
-import TablaDemo from "../components/TableDemo.vue";
+import ExerciseComponent from "../components/ExerciseComponent.vue";
+import RoutineManager from "../components/RoutineManager.vue";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -24,7 +25,12 @@ export const router = createRouter({
         {
             path: "/",
             name: "Home",
-            component: TablaDemo
+            component: HomeComponent
+        },
+        {
+            path: "/routines",
+            name: "Routines",
+            component: RoutineManager
         },
         {
             path: "/info",
@@ -43,7 +49,7 @@ export const router = createRouter({
         {
             path: "/exercises",
             name: "exercises",
-            component: BrowserExercise
+            component: ExerciseComponent
         }]
 });
 

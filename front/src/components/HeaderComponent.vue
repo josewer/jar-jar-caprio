@@ -29,8 +29,9 @@ const handlerLogout = async () => {
       </div>
 
       <div class="center-links">
-        <router-link class="link" to="/">Home</router-link>
-        <router-link class="link" to="/exercises">Exercises</router-link>
+        <router-link class="link" to="/"><p title="Inicio">Inicio</p></router-link>
+        <router-link class="link" to="/routines">Rutinas</router-link>
+        <router-link class="link" to="/exercises">Ejercicios</router-link>
       </div>
 
       <div class="login">

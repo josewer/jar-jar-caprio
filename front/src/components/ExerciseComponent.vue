@@ -4,6 +4,8 @@ import { useExerciseStore } from '../stores/exercise';
 import FilterExercise from './FilterExercise.vue'
 import HeaderComponent from './HeaderComponent.vue'
 import SpinnerComponent from './SpinnerComponent.vue';
+import ExerciseDetails from './ExerciseDetails.vue';
+import { getDifficultyColor } from '../../utils/functions';
 
 const exerciseStore = useExerciseStore();
 
@@ -70,23 +72,6 @@ const loadMore = () => {
   }
 };
 
-
-const getDifficultyColor = (difficulty) => {
-
-  if (!showColorDifficulty.value) { return; }
-
-  switch (difficulty) {
-    case 1:
-      return 'linear-gradient(145deg, #34d399, #10b981)';
-    case 2:
-      return 'linear-gradient(145deg, #facc15, #f59e0b)';
-    case 3:
-      return 'linear-gradient(145deg, #ef4444, #8b5cf6)';
-    default:
-      return 'linear-gradient(145deg, #10b981, #3b82f6)';
-  }
-}
-
 </script>
 
 <template>
@@ -100,8 +85,9 @@ const getDifficultyColor = (difficulty) => {
     <SpinnerComponent v-if="isLoading" />
     <div class="grid">
       <div v-for="exercise in filteredExercises" :key="exercise.id" class="card"
-        :style="{ background: getDifficultyColor(exercise.difficulty) }" @click="openModal(exercise)"
-        @mouseenter="hoveredExerciseId = exercise.id" @mouseleave="hoveredExerciseId = null">
+        :style="{ background: showColorDifficulty && getDifficultyColor(exercise.difficulty)}"
+        @click="openModal(exercise)" @mouseenter="hoveredExerciseId = exercise.id"
+        @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
           <img :src="hoveredExerciseId === exercise.id
             ? `/src/assets/exercises/webp/${exercise.id}.webp`
@@ -118,34 +104,8 @@ const getDifficultyColor = (difficulty) => {
     <!-- Sentinel para infinite scroll -->
     <div ref="sentinel" style="height: 1px;"></div>
 
-    <!-- MODAL -->
-    <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
-      <div class="modal" :style="{ background: getDifficultyColor(modalExercise.difficulty) }">
-        <button class="close-btn" @click="closeModal">✕</button>
-        <h3 class="modal-title">{{ modalExercise.name }}</h3>
-        <p class="modal-subtitle">{{ modalExercise.mainMuscle }} - {{ modalExercise.type }}</p>
+    <ExerciseDetails v-if="showModal" @closeModal="closeModal" :showColorDifficulty="showColorDifficulty" :id="modalExercise.id" />
 
-        <div class="modal-section scrollable">
-          <h4>Descripción</h4>
-          <p>{{ modalExercise.description }}</p>
-        </div>
-
-        <div class="modal-img-container">
-          <img :src="`/src/assets/exercises/gifs/${modalExercise.id}.gif`" class="modal-img" />
-        </div>
-
-        <div class="modal-section">
-          <h4>Musculos involucrados</h4>
-          <p>{{ modalExercise.involvedMuscles.length === 0 ? 'Todos' : modalExercise.involvedMuscles.join(', ') }}</p>
-        </div>
-
-        <div class="modal-section">
-          <h4>Equipamiento</h4>
-          <p>{{ modalExercise.equipment.length === 0 ? 'Ninguno' : modalExercise.equipment.join(', ') }}</p>
-        </div>
-
-      </div>
-    </div>
   </div>
 </template>
 
@@ -234,122 +194,5 @@ const getDifficultyColor = (difficulty) => {
   font-size: 13px;
   opacity: 0.9;
   color: #f0f0f0;
-}
-
-/* MODAL */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
-
-.modal {
-  background: linear-gradient(145deg, #10b981, #3b82f6);
-  border-radius: 24px;
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  width: 380px;
-  max-width: 90%;
-  color: white;
-  text-align: center;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
-  animation: modalAppear 0.35s ease-out;
-  position: relative;
-  backdrop-filter: blur(6px);
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.modal-title {
-  font-size: 22px;
-  font-weight: 70px;
-  margin: 0;
-}
-
-.modal-subtitle {
-  font-size: 15px;
-  opacity: 0.9;
-  margin: 0 0 0.5rem 0;
-}
-
-.modal-section {
-  text-align: left;
-  padding: 0.5rem 0;
-  border-top: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-
-.modal-section h4 {
-  margin: 0 0 0.3rem 0;
-  font-size: 17px;
-  font-weight: 600;
-  opacity: 0.9;
-}
-
-.modal-section p {
-  font-size: 15px;
-  margin: 0;
-  line-height: 1.4;
-}
-
-/* Imagen */
-.modal-img-container {
-  display: flex;
-  justify-content: center;
-  margin: 0.5rem 0;
-}
-
-.modal-img {
-  width: 100%;
-  border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* Scrollable para descripciones largas */
-.scrollable {
-  max-height: 100px;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-}
-
-/* Botón de cierre más alto */
-.close-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.2s;
-  z-index: 10;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-
-@keyframes modalAppear {
-  from {
-    transform: translateY(-30px) scale(0.95);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
 }
 </style>

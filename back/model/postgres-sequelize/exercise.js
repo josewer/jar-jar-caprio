@@ -5,7 +5,9 @@ import { catExerciseModel } from './db.js';
 export class Exercise {
 
   async get() {
-    return await catExerciseModel.findAll();
+    return await catExerciseModel.findAll({
+      attributes: ["id", "type", "name", "mainMuscle", "difficulty"]
+    });
   }
 
   async search({ input }) {
@@ -22,12 +24,15 @@ export class Exercise {
 
     if (involvedMuscles) {
       filters.involved_muscles = {
-        [Op.contains]: [involvedMuscles] 
+        [Op.contains]: [involvedMuscles]
       };
     }
 
     return await catExerciseModel.findAll(
-      { where: filters }
+      {
+        attributes: ["id", "type", "name", "mainMuscle", "difficulty"],
+        where: filters
+      }
     );
   }
 
