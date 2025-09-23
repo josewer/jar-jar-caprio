@@ -96,8 +96,8 @@ onMounted(async () => {
                     :class="{ 'row-selected': rowSelected === exercise.id }" v-for="exercise in exerciseStore.exercises"
                     :key="exercise.id">
                     <td>{{ exercise.name }}</td>
-                    <td>{{ exercise.category }}</td>
-                    <td>{{ exercise.muscle }}</td>
+                    <td>{{ exercise.type }}</td>
+                    <td>{{ exercise.mainMuscle }}</td>
 
                     <td @click="showModalRemove(exercise.id)" class="btn-remove" title="Remove"> ❌ </td>
                 </tr>

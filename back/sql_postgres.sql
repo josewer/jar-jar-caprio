@@ -91,3 +91,10 @@ ALTER TABLE training_session
 
 ALTER TABLE cat_exercise
   ADD COLUMN description TEXT;
+
+
+ALTER TABLE cat_exercise
+  ALTER COLUMN involved_muscles TYPE VARCHAR(50)[];
+
+ALTER TABLE cat_exercise
+  ALTER COLUMN equipment TYPE VARCHAR(50)[];

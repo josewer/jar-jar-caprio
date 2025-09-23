@@ -7,7 +7,7 @@ import LoginComponent from "../views/LoginComponent.vue";
 import { useAuthStore } from "../stores/auth";
 import { ToastCumtom } from "../../utils/toast";
 import RoutineDashBoard from "../components/RoutineDashBoard.vue";
-import TablaDemo from "../components/TablaDemo.vue";
+import TablaDemo from "../components/TableDemo.vue";
 
 export const router = createRouter({
     history: createWebHistory(),

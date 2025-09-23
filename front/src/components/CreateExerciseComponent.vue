@@ -1,7 +1,7 @@
 <script setup>
 import HeaderComponent from '../components/HeaderComponent.vue';
 import { Exercise } from '../model/Exercise.js';
-import { Categories } from '../enums/Categories.js';
+import { ExerciseType } from '../enums/ExerciseType.js';
 import { Muscles } from '../enums/Muscles.js';
 import { exerciseSchema } from '../validation/exerciseShema.js';
 import { Form, Field, ErrorMessage } from 'vee-validate';
@@ -12,7 +12,7 @@ import { onMounted, ref } from 'vue';
 import SpinComponent from './SpinnerComponent.vue';
 import { ToastCumtom } from '../../utils/toast.js';
 
-const categoryOptions = Object.values(Categories);
+const categoryOptions = Object.values(ExerciseType);
 const musclesOptions = Object.values(Muscles);
 
 const exerciseStore = useExerciseStore();

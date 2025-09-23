@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import ExerciseComponent from './ExerciseComponent.vue';
+import ExerciseComponent from './ExerciseComponent_test.vue';
 
 // Datos de la rutina
 const routine = ref({

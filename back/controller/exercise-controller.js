@@ -7,16 +7,29 @@ import { Exercise } from '../model/postgres-sequelize/Exercise.js';
 export class ExerciseController {
   exerciseModel = new Exercise();
 
-  async get (req, res) {
+  async get(req, res) {
     const exercises = await this.exerciseModel.get();
     return res.status(200).json(exercises);
   }
 
-  async getById (req, res) {
+  async search(req, res) {
+    try {
+      const exercises = await this.exerciseModel.search({ input: req.body });
+      return res.status(200).json(exercises);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: 'Error.',
+        message: 'Unexpected error'
+      });
+    }
+
+  }
+
+  async getById(req, res) {
     const id = req.params.id;
 
     const exercise = await this.exerciseModel.getById({ id });
-    console.log(exercise);
     if (exercise) {
       return res.status(200).json(exercise);
     } else {
@@ -27,7 +40,7 @@ export class ExerciseController {
     }
   }
 
-  async delete (req, res) {
+  async delete(req, res) {
     const id = req.params.id;
 
     const deleted = await this.exerciseModel.delete({ id });
@@ -42,7 +55,7 @@ export class ExerciseController {
     }
   }
 
-  async post (req, res) {
+  async post(req, res) {
     const result = validate(req.body);
 
     if (!result.success) {
@@ -61,7 +74,7 @@ export class ExerciseController {
     });
   }
 
-  async put (req, res) {
+  async put(req, res) {
     const result = partialValidate(req.body);
     const id = req.params.id;
 

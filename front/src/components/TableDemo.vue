@@ -3,8 +3,20 @@ import { ref, computed, onMounted } from 'vue';
 import { useExerciseStore } from '../stores/exercise';
 import FilterExercise from './FilterExercise.vue'
 import HeaderComponent from './HeaderComponent.vue'
+import SpinnerComponent from './SpinnerComponent.vue';
 
 const exerciseStore = useExerciseStore();
+
+const isLoading = ref(true)
+const showColorDifficulty = ref(false)
+
+const setIsLoading = (value) => {
+  isLoading.value = value;
+}
+
+const setShowColorDifficulty = (value) => {
+  showColorDifficulty.value = value;
+}
 
 onMounted(async () => {
   // Cargar ejercicios
@@ -18,6 +30,8 @@ onMounted(async () => {
   });
 
   if (sentinel.value) { observer.observe(sentinel.value); }
+
+  isLoading.value = false;
 });
 
 // Lista de ejercicios seleccionados
@@ -56,30 +70,37 @@ const loadMore = () => {
   }
 };
 
-const difficultyGradient = computed(() => {
-  if (!modalExercise.value) return 'linear-gradient(145deg, #10b981, #3b82f6)';
-  switch (modalExercise.value.difficulty) {
+
+const getDifficultyColor = (difficulty) => {
+
+  if (!showColorDifficulty.value) { return; }
+
+  switch (difficulty) {
     case 1:
-      return 'linear-gradient(145deg, #34d399, #10b981)'; // verde
+      return 'linear-gradient(145deg, #34d399, #10b981)';
     case 2:
-      return 'linear-gradient(145deg, #facc15, #f59e0b)'; // amarillo → naranja
+      return 'linear-gradient(145deg, #facc15, #f59e0b)';
     case 3:
-      return 'linear-gradient(145deg, #ef4444, #8b5cf6)'; // rojo → morado
+      return 'linear-gradient(145deg, #ef4444, #8b5cf6)';
     default:
       return 'linear-gradient(145deg, #10b981, #3b82f6)';
   }
-});
+}
+
 </script>
 
 <template>
 
   <HeaderComponent />
-  <FilterExercise />
 
   <div class="exercise-selector">
+
+    <FilterExercise @setIsLoading="setIsLoading" @setShowColorDifficulty="setShowColorDifficulty" />
     <!-- GRID DE EJERCICIOS -->
+    <SpinnerComponent v-if="isLoading" />
     <div class="grid">
-      <div v-for="exercise in filteredExercises" :key="exercise.id" class="card" @click="openModal(exercise)"
+      <div v-for="exercise in filteredExercises" :key="exercise.id" class="card"
+        :style="{ background: getDifficultyColor(exercise.difficulty) }" @click="openModal(exercise)"
         @mouseenter="hoveredExerciseId = exercise.id" @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
           <img :src="hoveredExerciseId === exercise.id
@@ -92,7 +113,6 @@ const difficultyGradient = computed(() => {
           <p class="card-subtitle">{{ exercise.mainMuscle }}</p>
         </div>
       </div>
-
     </div>
 
     <!-- Sentinel para infinite scroll -->
@@ -100,7 +120,7 @@ const difficultyGradient = computed(() => {
 
     <!-- MODAL -->
     <div v-if="showModal" class="modal-backdrop" @click.self="closeModal">
-      <div class="modal" :style="{ background: difficultyGradient }">
+      <div class="modal" :style="{ background: getDifficultyColor(modalExercise.difficulty) }">
         <button class="close-btn" @click="closeModal">✕</button>
         <h3 class="modal-title">{{ modalExercise.name }}</h3>
         <p class="modal-subtitle">{{ modalExercise.mainMuscle }} - {{ modalExercise.type }}</p>
@@ -123,7 +143,6 @@ const difficultyGradient = computed(() => {
           <h4>Equipamiento</h4>
           <p>{{ modalExercise.equipment.length === 0 ? 'Ninguno' : modalExercise.equipment.join(', ') }}</p>
         </div>
-
 
       </div>
     </div>

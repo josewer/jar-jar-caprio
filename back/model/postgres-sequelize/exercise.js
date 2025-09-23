@@ -1,8 +1,34 @@
+
+import { Op } from 'sequelize';
 import { catExerciseModel } from './db.js';
 
 export class Exercise {
+
   async get() {
     return await catExerciseModel.findAll();
+  }
+
+  async search({ input }) {
+
+    console.log(input)
+
+    const { mainMuscle = null, difficulty = null, type = null, involvedMuscles = null } = input || {};
+
+    const filters = {};
+
+    if (mainMuscle) filters.mainMuscle = mainMuscle;
+    if (difficulty) filters.difficulty = difficulty;
+    if (type) filters.type = type;
+
+    if (involvedMuscles) {
+      filters.involved_muscles = {
+        [Op.contains]: [involvedMuscles] 
+      };
+    }
+
+    return await catExerciseModel.findAll(
+      { where: filters }
+    );
   }
 
   async getById({ id }) {

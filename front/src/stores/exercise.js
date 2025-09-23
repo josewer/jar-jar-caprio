@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { api } from "../../api";
-
+import { Muscles } from "../enums/Muscles";
+import { Categories } from "../enums/Categories";
+import { ExerciseType } from "../enums/ExerciseType";
 
 export const useExerciseStore = defineStore("exercise", () => {
 
@@ -42,6 +44,7 @@ export const useExerciseStore = defineStore("exercise", () => {
     const getById = async (id) => {
         try {
             const response = await api.get(`${END_POINT}/${id}`);
+            save([response.data]);
             return response.data;
         } catch (error) {
             throw error;
@@ -51,15 +54,37 @@ export const useExerciseStore = defineStore("exercise", () => {
     const getAll = async () => {
         try {
             const response = await api.get(END_POINT);
-            exercises.value = response.data;
+            save(response.data);
             return response.data;
         } catch (error) {
             throw error;
         }
     };
 
+    const search = async (filter) => {
+        try {
+            const response = await api.post(`${END_POINT}/search`, filter);
+            save(response.data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const save = (data) => {
+        exercises.value = data.map(exercise => ({
+            ...exercise,
+            mainMuscle: Categories[exercise.mainMuscle] || exercise.mainMuscle,
+            type: ExerciseType[exercise.type] || exercise.type,
+            involvedMuscles: exercise.involvedMuscles.map(m => Muscles[m] || m)
+        }))
+
+        exercises.value.sort((a, b) => a.name.localeCompare(b.name, 'es'));
+    }
+
     return {
         exercises,
+        search,
         create,
         update,
         deleteExercise,
