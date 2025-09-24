@@ -1,17 +1,17 @@
 export const getDifficultyColor = (difficulty, show) => {
 
   if (!show) {
-    return 'linear-gradient(145deg, #10b981, #3b82f6)';
+    return 'var(--card-background-color-default)';
   }
 
   switch (difficulty) {
     case 1:
-      return 'linear-gradient(145deg, #34d399, #10b981)';
+      return 'var(--card-background-color-level-1)';
     case 2:
-      return 'linear-gradient(145deg, #facc15, #f59e0b)';
+      return 'var(--card-background-color-level-2)';
     case 3:
-      return 'linear-gradient(145deg, #ef4444, #8b5cf6)';
+      return 'var(--card-background-color-level-3)';
     default:
-      return 'linear-gradient(145deg, #10b981, #3b82f6)';
+      return 'var(--card-background-color-default)';
   }
 }

@@ -52,7 +52,6 @@ const handleSubmit = async () => {
     height: 100vh;
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
 }
 

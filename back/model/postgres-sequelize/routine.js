@@ -3,7 +3,20 @@ import { templateRoutineModel, templateExercisesModel, catExerciseModel } from '
 export class Routine {
   async get({ userId }) {
     return await templateRoutineModel.findAll({
-      where: { userId }
+      where: { userId },
+      include: [
+        {
+          model: templateExercisesModel,
+          attributes: ['id', 'numSeries', 'numRepeats'],
+          include: [
+            {
+              model: catExerciseModel,
+               attributes: ['id', 'name'],
+              as: 'exercise'
+            }
+          ]
+        }
+      ]
     });
   }
 

@@ -2,6 +2,11 @@
 import { ref, computed } from 'vue';
 import ExerciseComponent from './ExerciseComponent_test.vue';
 
+
+const props = defineProps({
+  routine: Object
+})
+
 // Datos de la rutina
 const routine = ref({
   name: "Espalda",
@@ -97,7 +102,6 @@ function calcularCalorias(exercise) {
   flex-shrink: 0;
   color: white;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
 }

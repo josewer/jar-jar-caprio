@@ -80,7 +80,6 @@ const handleClickCard = () => {
   /* para scroll horizontal */
   color: white;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
   cursor: pointer;

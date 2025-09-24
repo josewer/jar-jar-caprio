@@ -1,5 +1,5 @@
 <script setup>
-import Routine from './Routine.vue';
+import Routine from './RoutineCard.vue';
 import HeaderComponent from './HeaderComponent.vue';
 
 </script>

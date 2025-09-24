@@ -10,10 +10,12 @@
   --button-secundary-background: #057760;
   --button-hover-secundary-background: #0b5546;
 
-  --label-form-color: #16a085; 
+  --label-form-color: #16a085;
 
-  --card-background-color-default: linear-gradient(145deg, #34d399, #3b82f6);
-  --card-background-color-level-2 : 'linear-gradient(145deg, #facc15, #f59e0b)';
+  --card-background-color-default: linear-gradient(135deg, #208862, #3b82f6);
+  --card-background-color-level-1: linear-gradient(145deg, #34d399, #096b4a);
+  --card-background-color-level-2: linear-gradient(145deg, #bd9c1a, #b67505);
+  --card-background-color-level-3: linear-gradient(145deg, #ef4444, #8b5cf6);
 }
 
 * {
@@ -31,12 +33,24 @@ li {
 }
 
 .btn-cancel:hover {
-    background: #808e8f;
+  background: #808e8f;
 }
 
 .btn-cancel {
-    background: #a3a9ac;
-    color: #fff;
+  background: #a3a9ac;
+  color: #fff;
 }
 
+
+.template-card {
+  background: var(--card-background-color-default);
+  border-radius: 24px;
+  padding: 24px;
+  flex-shrink: 0;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
 

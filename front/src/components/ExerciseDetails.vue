@@ -4,7 +4,10 @@ import { useExerciseStore } from '../stores/exercise';
 import { getDifficultyColor } from '../../utils/functions';
 
 const props = defineProps({
-    showColorDifficulty : Boolean,
+    showColorDifficulty : {
+      type: Boolean,
+      default: () => false
+    },
     id: String
 })
 

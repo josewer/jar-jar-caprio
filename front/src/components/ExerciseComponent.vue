@@ -65,7 +65,7 @@ const loadMore = () => {
 
     <SpinnerComponent v-if="isLoading" />
     <div class="grid">
-        <ExerciseCard v-for="exercise in filteredExercises" :exercise="exercise" :showColorDifficulty="showColorDifficulty" :showToggleSelection="true"/>
+        <ExerciseCard v-for="exercise in filteredExercises" :key="exercise.id" :exercise="exercise" :showColorDifficulty="showColorDifficulty" :showToggleSelection="true"/>
     </div>
 
     <!-- Sentinel para infinite scroll -->

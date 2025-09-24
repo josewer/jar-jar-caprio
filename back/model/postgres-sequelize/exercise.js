@@ -12,8 +12,6 @@ export class Exercise {
 
   async search({ input }) {
 
-    console.log(input)
-
     const { mainMuscle = null, difficulty = null, type = null, involvedMuscles = null } = input || {};
 
     const filters = {};

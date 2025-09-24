@@ -1,6 +1,6 @@
 <script setup>
 import MyWeekCardComponent from './MyWeekCardComponent.vue';
-import RutineCard from './Routine.vue';
+import RutineCard from './RoutineCard_test.vue';
 </script>
 
 <template>

@@ -14,9 +14,8 @@ export const useExerciseStore = defineStore("exercise", () => {
     const create = async (exercise) => {
         try {
             const response = await api.post(END_POINT, exercise);
-            const data = response.data;
-            exercises.value.push(data);
-            return data;
+            save(response.data , true);
+            return exercise.value;
         } catch (error) {
             throw error;
         }
@@ -73,8 +72,6 @@ export const useExerciseStore = defineStore("exercise", () => {
     };
 
     const save = (data, isOne = false) => {
-
-
         if (!isOne) {
             exercises.value = data.map(exercise => ({
                 ...exercise,
