@@ -81,11 +81,11 @@ const loadMore = () => {
   <div class="exercise-selector">
 
     <FilterExercise @setIsLoading="setIsLoading" @setShowColorDifficulty="setShowColorDifficulty" />
-    <!-- GRID DE EJERCICIOS -->
+
     <SpinnerComponent v-if="isLoading" />
     <div class="grid">
       <div v-for="exercise in filteredExercises" :key="exercise.id" class="card"
-        :style="{ background: showColorDifficulty && getDifficultyColor(exercise.difficulty)}"
+        :style="{ background: getDifficultyColor(exercise.difficulty, showColorDifficulty) }"
         @click="openModal(exercise)" @mouseenter="hoveredExerciseId = exercise.id"
         @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
@@ -104,7 +104,8 @@ const loadMore = () => {
     <!-- Sentinel para infinite scroll -->
     <div ref="sentinel" style="height: 1px;"></div>
 
-    <ExerciseDetails v-if="showModal" @closeModal="closeModal" :showColorDifficulty="showColorDifficulty" :id="modalExercise.id" />
+    <ExerciseDetails v-if="showModal" @closeModal="closeModal" :showColorDifficulty="showColorDifficulty"
+      :id="modalExercise.id" />
 
   </div>
 </template>
@@ -112,7 +113,6 @@ const loadMore = () => {
 <style scoped>
 .exercise-selector {
   padding: 1rem;
-  font-family: 'Segoe UI', sans-serif;
 }
 
 /* GRID */
@@ -124,7 +124,7 @@ const loadMore = () => {
 
 /* TARJETA */
 .card {
-  background: linear-gradient(145deg, #34d399, #3b82f6);
+  background: var(--card-background-color-default);
   border-radius: 16px;
   overflow: hidden;
   color: white;

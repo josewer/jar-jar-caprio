@@ -1,4 +1,8 @@
-export const getDifficultyColor = (difficulty) => {
+export const getDifficultyColor = (difficulty, show) => {
+
+  if (!show) {
+    return 'linear-gradient(145deg, #10b981, #3b82f6)';
+  }
 
   switch (difficulty) {
     case 1:

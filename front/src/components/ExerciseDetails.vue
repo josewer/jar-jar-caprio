@@ -26,7 +26,7 @@ const closeModal = () => {
 
 <template>
     <div class="modal-backdrop" @click.self="closeModal" >
-      <div class="modal" :style="{ background: props.showColorDifficulty && getDifficultyColor(modalExercise.difficulty)}">
+      <div class="modal" :style="{ background: getDifficultyColor(modalExercise.difficulty , props.showColorDifficulty)}">
         <button class="close-btn" @click="closeModal">✕</button>
         <h3 class="modal-title">{{ modalExercise.name }}</h3>
         <p class="modal-subtitle">{{ modalExercise.mainMuscle }} - {{ modalExercise.type }}</p>
@@ -69,7 +69,7 @@ const closeModal = () => {
 }
 
 .modal {
-  background: linear-gradient(145deg, #10b981, #3b82f6);
+  background: var(--card-background-color-default);
   border-radius: 24px;
   padding: 2rem 1.5rem 1.5rem 1.5rem;
   width: 380px;
