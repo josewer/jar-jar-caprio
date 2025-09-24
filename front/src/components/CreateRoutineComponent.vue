@@ -6,8 +6,8 @@ import { useRoute } from 'vue-router';
 import { router } from '../router/index.js';
 import SpinComponent from './SpinnerComponent.vue';
 import { ToastCumtom } from '../../utils/toast.js';
-import { useRoutineStore } from '../stores/routine.js'; 
-import { routineSchema } from '../validation/routineSchema.js'; 
+import { useRoutineStore } from '../stores/routine.js';
+import { routineSchema } from '../validation/routineSchema.js';
 import { Routine } from '../model/Routine.js';
 
 const routineStore = useRoutineStore();
@@ -31,13 +31,13 @@ const handleSubmit = async (values, { resetForm }) => {
       const routine = new TemplateRoutine(values.name, values.description, id);
       await routineStore.update(id, routine);
       router.push({ name: 'Routines' }).then(() => {
-        ToastCumtom.success("Template routine updated successfully.");
+        ToastCumtom.success("Modificado correctamente.");
       });
     } else {
       const routine = new Routine(values.name, values.description);
       await routineStore.create(routine);
       router.push({ name: 'Routines' }).then(() => {
-        ToastCumtom.success("Template routine created successfully.");
+        ToastCumtom.success("Creado correctamente.");
       });
     }
     resetForm();
@@ -45,6 +45,10 @@ const handleSubmit = async (values, { resetForm }) => {
     ToastCumtom.error(error.message, error.status);
   }
 };
+
+const addExercise = () => {
+    
+}
 
 onMounted(async () => {
   if (isEdit) {
@@ -69,31 +73,28 @@ onMounted(async () => {
 
   <SpinComponent v-if="isLoading" />
   <div class="form-container" v-else>
-    <Form
-      :validation-schema="routineSchema"
-      :key="initialValues.id"
-      :initial-values="initialValues"
-      @submit="handleSubmit"
-      id="template-routine-form"
-    >
-      <h2 class="form-title">{{ isEdit ? "Edit Template Routine" : "Register Template Routine" }}</h2>
+    <Form :validation-schema="routineSchema" :key="initialValues.id" :initial-values="initialValues"
+      @submit="handleSubmit" id="template-routine-form">
+      <h2 class="form-title">{{ isEdit ? "Modificar rutina" : "Crear rutina" }}</h2>
 
-      <!-- Name -->
       <div class="form-group">
-        <label for="name">Routine name:</label>
-        <Field as="input" type="text" id="name" name="name" placeholder="Enter routine name" required />
+        <label for="name">Nombre:</label>
+        <Field as="input" type="text" id="nombre" name="name" placeholder="💪 Dia de brazos" required />
         <ErrorMessage class="msg-error" name="name" />
       </div>
 
       <!-- Description -->
       <div class="form-group">
-        <label for="description">Description:</label>
-        <Field as="textarea" id="description" name="description" rows="4" placeholder="Enter description..." />
+        <label for="description">Descripción:</label>
+        <Field as="textarea" id="description" name="description" rows="4" placeholder="El dia que más me gusta..." />
         <ErrorMessage class="msg-error" name="description" />
       </div>
 
+      <button id="btAddExercise" type="button">
+        ➕ Añadir ejercicio
+      </button>
       <button id="btSubmit" type="submit">
-        {{ isEdit ? "Update Routine" : "Save Routine" }}
+        💾 Guardar rutina
       </button>
     </Form>
   </div>

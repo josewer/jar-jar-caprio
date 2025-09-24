@@ -158,7 +158,7 @@ const setShowColorDifficulty = () => {
 
 button {
   padding: 0.5rem 1rem;
-  background: linear-gradient(145deg, #10b981, #3b82f6);
+  background: var(--card-background-color-default);
   color: white;
   border: none;
   border-radius: 12px;
