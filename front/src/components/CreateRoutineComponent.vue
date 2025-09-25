@@ -195,7 +195,7 @@ form button:hover {
   right: 0;
   bottom: 0;
   z-index: 1;
-  background: rgba(212, 104, 104, 0.95);
+  background: rgba(0, 0, 0, 0.55);
   overflow-y: auto;
 }
 </style>
