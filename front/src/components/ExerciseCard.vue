@@ -17,10 +17,17 @@ const props = defineProps({
     selectedExercises: {
         type: Array,
         default: () => []
+    },
+    showContentCard: {
+        type: Boolean,
+        default: () => true
+    }, compact: {
+        type: Boolean,
+        default: () => false
     }
 })
 
-const emit = defineEmits(["addExercise" , "removeExercise"]);
+const emit = defineEmits(["addExercise", "removeExercise"]);
 
 const hoveredExerciseId = ref(null);
 
@@ -41,10 +48,10 @@ function closeModal() {
 
 function toggleSelection(exercise, event) {
     if (event.target.checked) {
-        emit("addExercise" , exercise);
+        emit("addExercise", exercise);
         ToastCumtom.success("Ejercicio añadido.")
     } else {
-        emit("removeExercise" , exercise);
+        emit("removeExercise", exercise);
         ToastCumtom.success("Ejercicio excluido.")
     }
 }
@@ -52,7 +59,7 @@ function toggleSelection(exercise, event) {
 </script>
 
 <template>
-    <div class="card" :style="{ background: getDifficultyColor(props.exercise.difficulty, props.showColorDifficulty) }"
+    <div class="card" :class="{ compact: compact }"
         @click="openModal(props.exercise)" @mouseenter="hoveredExerciseId = props.exercise.id"
         @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
@@ -60,10 +67,11 @@ function toggleSelection(exercise, event) {
                 ? `/src/assets/exercises/webp/${props.exercise.id}.webp`
                 : `/src/assets/exercises/thumbnails/${props.exercise.id}.webp`" class="card-img" />
 
-            <input v-if="showToggleSelection" type="checkbox" class="card-checkbox" :checked="props.selectedExercises.includes(props.exercise.id)"
+            <input v-if="showToggleSelection" type="checkbox" class="card-checkbox"
+                :checked="props.selectedExercises.includes(props.exercise.id)"
                 @click.stop="toggleSelection(props.exercise, $event)" />
         </div>
-        <div class="card-content">
+        <div class="card-content" :style="{ background: getDifficultyColor(props.exercise.difficulty, props.showColorDifficulty) }">
             <h3 class="card-title">{{ props.exercise.name }}</h3>
             <p class="card-subtitle">{{ props.exercise.mainMuscle }}</p>
         </div>
@@ -76,7 +84,6 @@ function toggleSelection(exercise, event) {
 
 <style scoped>
 .card {
-    background: var(--card-background-color-default);
     border-radius: 16px;
     overflow: hidden;
     color: white;
@@ -145,5 +152,28 @@ function toggleSelection(exercise, event) {
     font-size: 13px;
     opacity: 0.9;
     color: #f0f0f0;
+}
+
+/* --- MODO COMPACTO --- */
+.card.compact {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.card.compact .card-img-container {
+    border-radius: 6px;
+}
+
+.card.compact .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card.compact .card-content {
+    display: none;
 }
 </style>

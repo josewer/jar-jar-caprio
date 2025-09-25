@@ -2,11 +2,13 @@
 
 import ModalComponent from '../components/ModalComponent.vue';
 import { ref } from 'vue';
+import ExerciseCard from './ExerciseCard.vue';
 
 
 const props = defineProps({
     exercises : {
-        type : Array
+        type : Array,
+        default: () => []
     }
 })
 
@@ -46,16 +48,18 @@ const handleRemove = (value) => {
         <table class="exercise-table">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Muscle</th>
-                    <th style="text-align: center;">Remove</th>
+                    <th></th>
+                    <th>Nombre</th>
+                    <th>Series</th>
+                    <th>Repeticiones</th>
+                    <th style="text-align: center;">Borrar</th>
                 </tr>
             </thead>
             <tbody>
                 <tr @click="rowSelected = exercise.id"
                     :class="{ 'row-selected': rowSelected === exercise.id }" v-for="exercise in props.exercises"
                     :key="exercise.id">
+                    <td><ExerciseCard :exercise="exercise" :compact="true"/></td>
                     <td>{{ exercise.name }}</td>
                     <td>{{ exercise.type }}</td>
                     <td>{{ exercise.mainMuscle }}</td>
@@ -118,6 +122,7 @@ const handleRemove = (value) => {
     border-radius: 0px 0px 12px 12px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;;
 }
 
 /* Encabezado */
@@ -148,7 +153,7 @@ const handleRemove = (value) => {
 }
 
 .exercise-table tbody tr:nth-child(odd) {
-    background: #fff;
+    background: #e6e4e4;
 }
 
 /* Hover */
@@ -165,5 +170,12 @@ button:disabled {
     pointer-events: none;
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.exercise-table td:first-child {
+  max-width: 60px;
+  max-height: 60px;
+  overflow: hidden;
+  object-fit: cover; /* mantiene proporción y recorta */
 }
 </style>
