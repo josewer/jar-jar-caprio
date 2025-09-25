@@ -10,6 +10,7 @@ import { useRoutineStore } from '../stores/routine.js';
 import { routineSchema } from '../validation/routineSchema.js';
 import { Routine } from '../model/Routine.js';
 import ExerciseComponent from './ExerciseComponent.vue';
+import TableExercisesRoutine from './TableExercisesRoutine.vue';
 
 const routineStore = useRoutineStore();
 
@@ -48,14 +49,19 @@ const handleSubmit = async (values, { resetForm }) => {
 };
 
 const showModalExercises = ref(false);
+const exercisesSeleted = ref([])
 
-const setShowModalExercises = (value) => {
-  showModalExercises.value = value;
+const openModalExercises = () => {
+  showModalExercises.value = true;
 }
 
-const addExercises = (exercisesSeleted) => {
+const addExercises = (exercises) => {
   showModalExercises.value = false;
-  console.log(exercisesSeleted)
+  exercisesSeleted.value.push(...exercises);
+}
+
+const removeExercise = (exercise) => {
+  exercisesSeleted.value = exercisesSeleted.value.filter(e => e.id !== exercise.id);
 }
 
 onMounted(async () => {
@@ -77,9 +83,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <HeaderComponent />
+  <HeaderComponent v-show="!showModalExercises" />
 
   <SpinComponent v-if="isLoading" />
+
   <div class="form-container" v-else>
     <Form :validation-schema="routineSchema" :key="initialValues.id" :initial-values="initialValues"
       @submit="handleSubmit" id="template-routine-form">
@@ -98,14 +105,14 @@ onMounted(async () => {
         <ErrorMessage class="msg-error" name="description" />
       </div>
 
-      <button id="btAddExercise" type="button" @click="setShowModalExercises(true)">
-        ➕ Añadir ejercicio
-      </button>
+      <TableExercisesRoutine :exercises="exercisesSeleted" @addExercise="openModalExercises" />
+
       <button id="btSubmit" type="submit">
-        💾 Guardar rutina
+        Guardar
       </button>
     </Form>
   </div>
+
   <div class="modal" v-if="showModalExercises">
     <ExerciseComponent :is-modal="true" @addExercises="addExercises" />
   </div>
@@ -122,27 +129,29 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  overflow-y: auto;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 400px;
-  max-height: 90vh;
-  padding: 2rem;
+  gap: 1rem;
+  padding: 1rem;
   border-radius: 12px;
   background-color: #f5f5f5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
+
+}
+
+@media (max-width: 600px) {
+  form {
+    padding: 5px;
+  }
 }
 
 .form-title {
-  text-align: center;
-  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(4, 189, 87, 0.384);
   color: #1abc9c;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
 }
 
 .form-group {
@@ -175,6 +184,7 @@ form {
 
 form button {
   padding: 0.75rem;
+  width: 100px;
   background-color: #1abc9c;
   color: #fff;
   border: none;
@@ -190,10 +200,7 @@ form button:hover {
 
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 1;
   background: rgba(0, 0, 0, 0.55);
   overflow-y: auto;
