@@ -6,6 +6,16 @@ import HeaderComponent from './HeaderComponent.vue'
 import SpinnerComponent from './SpinnerComponent.vue';
 import ExerciseCard from './ExerciseCard.vue';
 
+
+const emit = defineEmits(["addExercises"])
+
+const props = defineProps({
+  isModal: {
+    Boolean,
+    default: () => false
+  }
+})
+
 const exerciseStore = useExerciseStore();
 
 const isLoading = ref(true)
@@ -53,29 +63,53 @@ const loadMore = () => {
   }
 };
 
+
+const exercisesSeleted = []
+
+const addExercise = (exercise) => {
+  exercisesSeleted.push(exercise);
+}
+
+const removeExercise = (exercise) => {
+  const index = exercisesSeleted.findIndex((e) => e.id === exercise.id);
+  exercisesSeleted.splice(index , 1);
+}
+
+const applySelection = () => {
+  emit("addExercises", exercisesSeleted)
+}
+
 </script>
 
 <template>
 
-  <HeaderComponent />
+  <HeaderComponent v-if="!isModal" />
 
   <div class="exercise-selector">
 
-    <FilterExercise @setIsLoading="setIsLoading" @setShowColorDifficulty="setShowColorDifficulty" />
+        <!-- Filtro sticky -->
+    <div :class="{'filter-sticky' : !props.isModal , 'filter-sticky-modal' : props.isModal }">
+      <FilterExercise @setIsLoading="setIsLoading" @setShowColorDifficulty="setShowColorDifficulty" />
+    </div>
 
     <SpinnerComponent v-if="isLoading" />
     <div class="grid">
-        <ExerciseCard v-for="exercise in filteredExercises" :key="exercise.id" :exercise="exercise" :showColorDifficulty="showColorDifficulty" :showToggleSelection="true"/>
+      <ExerciseCard v-for="exercise in filteredExercises" :key="exercise.id" :exercise="exercise"
+        :showColorDifficulty="showColorDifficulty" :showToggleSelection="true" @addExercise="addExercise" @removeExercise="removeExercise" />
     </div>
 
     <!-- Sentinel para infinite scroll -->
     <div ref="sentinel" style="height: 1px;"></div>
-
+    <div v-if="isModal" class="modal-actions">
+      <button class="button-default" @click="applySelection">
+        Aplicar selección
+      </button>
+    </div>
   </div>
+
 </template>
 
 <style scoped>
-
 .exercise-selector {
   padding: 1rem;
 }
@@ -85,5 +119,30 @@ const loadMore = () => {
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1rem;
 }
+
+.modal-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 16px 16px 0px 0px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-sticky {
+  position: sticky;
+  top: 57px;
+  z-index: 2;
+}
+
+.filter-sticky-modal {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
 
 </style>

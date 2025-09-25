@@ -22,7 +22,6 @@ const valuesDefault = {
 const filterSelected = ref({ ...valuesDefault })
 
 const handleSubmit = async () => {
-
   try {
     emit("setIsLoading", true)
     await exerciseStore.search(filterSelected.value);
@@ -43,72 +42,111 @@ const setShowColorDifficulty = () => {
   emit("setShowColorDifficulty", filterSelected.value.showColorDifficulty)
 }
 
+const showFilters = ref(false)
+
+function setShowFilters() {
+  showFilters.value = !showFilters.value;
+}
 </script>
 
 <template>
   <div class="filter-container">
-    <form @submit.prevent="handleSubmit" class="filter-form">
 
-      <div class="filter-group">
-        <label for="category">Músculo principal</label>
-        <select id="category" v-model="filterSelected.mainMuscle">
-          <option value=""></option>
-          <option v-for="category in CategoriesOptions" :key="category.code" :value="category.code">
-            {{ category.label }}
-          </option>
-        </select>
-      </div>
 
-      <div class="filter-group">
-        <label for="muscle">Músculo involucrado</label>
-        <select id="muscle" v-model="filterSelected.involvedMuscles">
-          <option value=""></option>
-          <option v-for="muscle in MusclesOptions" :key="muscle.code" :value="muscle.code">
-            {{ muscle.label }}
-          </option>
-        </select>
-      </div>
+    <div class="filter-row button-row">
+      <button class="button-toggle"  @click="setShowFilters">
+        {{ showFilters ? '🔼 Filtro' : '🔽 Filtro' }}
+      </button>
+    </div>
 
-      <div class="filter-group">
-        <label for="exerciseType">Tipo ejercicio</label>
-        <select id="exerciseType" v-model="filterSelected.type">
-          <option value=""></option>
-          <option v-for="exerciseType in ExerciseTypeOptions" :key="exerciseType.code" :value="exerciseType.code">
-            {{ exerciseType.label }}
-          </option>
-        </select>
-      </div>
 
-      <div class="filter-group">
-        <label for="difficulty">Dificultad</label>
-        <select id="difficulty" v-model="filterSelected.difficulty">
-          <option value=""></option>
-          <option v-for="difficulty in DifficultyTypeOptions" :key="difficulty.code" :value="difficulty.code">
-            {{ difficulty.label }}
-          </option>
-        </select>
-      </div>
+    <div class="filter-row form-row" v-show="showFilters">
+      <form @submit.prevent="handleSubmit" class="filter-form">
+        <div class="filter-group">
+          <label for="category">Músculo principal</label>
+          <select id="category" v-model="filterSelected.mainMuscle">
+            <option value=""></option>
+            <option v-for="category in CategoriesOptions" :key="category.code" :value="category.code">
+              {{ category.label }}
+            </option>
+          </select>
+        </div>
 
-      <div class="filter-group">
-        <label for="showDifficulty">Resaltar dificultad</label>
-        <input id="showDifficulty" @change="setShowColorDifficulty" type="checkbox" v-model="filterSelected.showColorDifficulty"></input>
-      </div>
+        <div class="filter-group">
+          <label for="muscle">Músculo involucrado</label>
+          <select id="muscle" v-model="filterSelected.involvedMuscles">
+            <option value=""></option>
+            <option v-for="muscle in MusclesOptions" :key="muscle.code" :value="muscle.code">
+              {{ muscle.label }}
+            </option>
+          </select>
+        </div>
 
-      <button type="submit">Buscar</button>
-      <button type="button" @click="handleReset">Limpiar</button>
-    </form>
+        <div class="filter-group">
+          <label for="exerciseType">Tipo ejercicio</label>
+          <select id="exerciseType" v-model="filterSelected.type">
+            <option value=""></option>
+            <option v-for="exerciseType in ExerciseTypeOptions" :key="exerciseType.code" :value="exerciseType.code">
+              {{ exerciseType.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="difficulty">Dificultad</label>
+          <select id="difficulty" v-model="filterSelected.difficulty">
+            <option value=""></option>
+            <option v-for="difficulty in DifficultyTypeOptions" :key="difficulty.code" :value="difficulty.code">
+              {{ difficulty.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="showDifficulty">Resaltar dificultad</label>
+          <input id="showDifficulty" @change="setShowColorDifficulty" type="checkbox"
+            v-model="filterSelected.showColorDifficulty"></input>
+        </div>
+      </form>
+    </div>
+
+    <div class="filter-row action-row" v-show="showFilters">
+      <button type="button" class="button-default" @click="handleSubmit">Buscar</button>
+      <button type="button" class="button-default" @click="handleReset">Limpiar</button>
+    </div>
+
   </div>
 </template>
 
 <style scoped>
 .filter-container {
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column; /* tres niveles */
+  gap: 0.5rem;
   padding: 1rem;
   background: #f5f5f5;
-  border-radius: 16px;
+  border-radius: 0px 0px 16px 16px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   margin-bottom: 1.5rem;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.button-row {
+  justify-content: flex-start;
+}
+
+.form-row {
+  flex-direction: column;
+}
+
+.action-row {
+  justify-content: flex-start;
+  gap: 0.5rem;
 }
 
 .filter-form {
@@ -135,19 +173,8 @@ const setShowColorDifficulty = () => {
   border-radius: 12px;
   border: 1px solid #ccc;
   font-size: 0.95rem;
-  min-width: 150px;
+  min-width: 200px;
   transition: all 0.2s;
-
-}
-
-.filter-group input[type="checkbox"] {
-  width: 32px;
-  height: 32px;
-  accent-color: #10b981;
-  /* cambia el color cuando está marcado */
-  cursor: pointer;
-  margin-top: 0.25rem;
-  /* espacio debajo de la etiqueta */
 }
 
 .filter-group select:focus {
@@ -156,21 +183,29 @@ const setShowColorDifficulty = () => {
   outline: none;
 }
 
-button {
-  padding: 0.5rem 1rem;
-  background: var(--card-background-color-default);
-  color: white;
-  border: none;
-  border-radius: 12px;
+.filter-group input[type="checkbox"] {
+  width: 32px;
+  height: 32px;
+  accent-color: #10b981;
   cursor: pointer;
-  min-height: 37px;
-  font-weight: 600;
-  transition: all 0.2s;
-  align-self: flex-end;
+  margin-top: 0.25rem;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+.button-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  color: #555;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: color 0.2s;
 }
+
+.button-toggle:hover {
+  color: #10b981;
+}
+
+
 </style>

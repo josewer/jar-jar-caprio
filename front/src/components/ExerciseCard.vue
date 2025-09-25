@@ -20,6 +20,8 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(["addExercise" , "removeExercise"]);
+
 const hoveredExerciseId = ref(null);
 
 // Modal
@@ -37,10 +39,12 @@ function closeModal() {
 }
 
 
-function toggleSelection(exerciseId, event) {
+function toggleSelection(exercise, event) {
     if (event.target.checked) {
+        emit("addExercise" , exercise);
         ToastCumtom.success("Ejercicio añadido.")
     } else {
+        emit("removeExercise" , exercise);
         ToastCumtom.success("Ejercicio excluido.")
     }
 }
@@ -57,7 +61,7 @@ function toggleSelection(exerciseId, event) {
                 : `/src/assets/exercises/thumbnails/${props.exercise.id}.webp`" class="card-img" />
 
             <input v-if="showToggleSelection" type="checkbox" class="card-checkbox" :checked="props.selectedExercises.includes(props.exercise.id)"
-                @click.stop="toggleSelection(props.exercise.id, $event)" />
+                @click.stop="toggleSelection(props.exercise, $event)" />
         </div>
         <div class="card-content">
             <h3 class="card-title">{{ props.exercise.name }}</h3>

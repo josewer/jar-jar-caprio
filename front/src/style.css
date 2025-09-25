@@ -54,3 +54,19 @@ li {
   cursor: pointer;
 }
 
+.button-default {
+  padding: 0.5rem 1rem;
+  background: var(--card-background-color-default);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  min-height: 37px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.button-default:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
+}

@@ -9,6 +9,7 @@ import { ToastCumtom } from '../../utils/toast.js';
 import { useRoutineStore } from '../stores/routine.js';
 import { routineSchema } from '../validation/routineSchema.js';
 import { Routine } from '../model/Routine.js';
+import ExerciseComponent from './ExerciseComponent.vue';
 
 const routineStore = useRoutineStore();
 
@@ -46,8 +47,15 @@ const handleSubmit = async (values, { resetForm }) => {
   }
 };
 
-const addExercise = () => {
-    
+const showModalExercises = ref(false);
+
+const setShowModalExercises = (value) => {
+  showModalExercises.value = value;
+}
+
+const addExercises = (exercisesSeleted) => {
+  showModalExercises.value = false;
+  console.log(exercisesSeleted)
 }
 
 onMounted(async () => {
@@ -78,9 +86,9 @@ onMounted(async () => {
       <h2 class="form-title">{{ isEdit ? "Modificar rutina" : "Crear rutina" }}</h2>
 
       <div class="form-group">
-        <label for="name">Nombre:</label>
-        <Field as="input" type="text" id="nombre" name="name" placeholder="💪 Dia de brazos" required />
-        <ErrorMessage class="msg-error" name="name" />
+        <label for="nameRoutine">Nombre:</label>
+        <Field as="input" id="nameRoutine" type="text" name="nameRoutine" placeholder="💪 Dia de brazos" />
+        <ErrorMessage class="msg-error" name="nameRoutine" />
       </div>
 
       <!-- Description -->
@@ -90,7 +98,7 @@ onMounted(async () => {
         <ErrorMessage class="msg-error" name="description" />
       </div>
 
-      <button id="btAddExercise" type="button">
+      <button id="btAddExercise" type="button" @click="setShowModalExercises(true)">
         ➕ Añadir ejercicio
       </button>
       <button id="btSubmit" type="submit">
@@ -98,6 +106,10 @@ onMounted(async () => {
       </button>
     </Form>
   </div>
+  <div class="modal" v-if="showModalExercises">
+    <ExerciseComponent :is-modal="true" @addExercises="addExercises" />
+  </div>
+
 </template>
 
 <style scoped>
@@ -174,5 +186,16 @@ form button {
 
 form button:hover {
   background-color: #16a085;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background: rgba(212, 104, 104, 0.95);
+  overflow-y: auto;
 }
 </style>
