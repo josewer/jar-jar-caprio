@@ -80,7 +80,7 @@ const closeMenu = () => {
 
                     <td>{{ exerciseRoutine.numSeries }}</td>
                     <td>{{ exerciseRoutine.numRepeats }}</td>
-                    <td>{{ exerciseRoutine.restTime }} seg</td>
+                    <td>{{ exerciseRoutine.restTime }} min</td>
 
                     <td class="menu-dots-container" @click.stop="toggleMenu(exerciseRoutine.id)">
                         ⋮

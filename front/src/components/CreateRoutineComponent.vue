@@ -99,7 +99,7 @@ const addExercises = (exercises) => {
 
     const exerciseRoutine = {
       id: crypto.randomUUID(),
-      restTime: 90,
+      restTime:'01:30',
       type: 'R',
       timePerSet: 30,
       numSeries: 3,
@@ -111,10 +111,6 @@ const addExercises = (exercises) => {
     exercisesRoutineSeleted.value.push(exerciseRoutine);
   }
 
-}
-
-const removeExercise = (exercise) => {
-  exercisesRoutineSeleted.value = exercisesRoutineSeleted.value.filter(e => e.id !== exercise.id);
 }
 
 onMounted(async () => {
