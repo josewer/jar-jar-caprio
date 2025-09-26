@@ -37,7 +37,6 @@ function closeModal() {
     <div v-if="showModal" class="modal">
       <ExerciseDetails @closeModal="closeModal" :id="selectedTemplate.exercise.id" />
     </div>
-
   </div>
 </template>
 

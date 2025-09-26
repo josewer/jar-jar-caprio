@@ -32,19 +32,18 @@ const emit = defineEmits(["addExercise", "removeExercise"]);
 const hoveredExerciseId = ref(null);
 
 // Modal
-const showModal = ref(false);
+const showModalExercise = ref(false);
 const modalExercise = ref(null);
 
-function openModal(exercise) {
+function openModalExercise(exercise) {
     modalExercise.value = exercise;
-    showModal.value = true;
+    showModalExercise.value = true;
 }
 
-function closeModal() {
-    showModal.value = false;
+function closeModalExercise() {
+    showModalExercise.value = false;
     modalExercise.value = null;
 }
-
 
 function toggleSelection(exercise, event) {
     if (event.target.checked) {
@@ -60,7 +59,7 @@ function toggleSelection(exercise, event) {
 
 <template>
     <div class="card" :class="{ compact: compact }"
-        @click="openModal(props.exercise)" @mouseenter="hoveredExerciseId = props.exercise.id"
+        @click="openModalExercise(props.exercise)" @mouseenter="hoveredExerciseId = props.exercise.id"
         @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
             <img :src="hoveredExerciseId === props.exercise.id
@@ -77,7 +76,7 @@ function toggleSelection(exercise, event) {
         </div>
     </div>
 
-    <ExerciseDetails v-if="showModal" @closeModal="closeModal" :showColorDifficulty="showColorDifficulty"
+    <ExerciseDetails v-if="showModalExercise" @closeModal="closeModalExercise" :showColorDifficulty="showColorDifficulty"
         :id="modalExercise.id" />
 
 </template>

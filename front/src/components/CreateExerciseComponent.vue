@@ -1,6 +1,6 @@
 <script setup>
 import HeaderComponent from '../components/HeaderComponent.vue';
-import { Exercise } from '../model/Exercise.js';
+import { Exercise } from '../model/Exercise_test.js';
 import { ExerciseType } from '../enums/ExerciseType.js';
 import { Muscles } from '../enums/Muscles.js';
 import { exerciseSchema } from '../validation/exerciseShema.js';

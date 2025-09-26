@@ -95,7 +95,7 @@ const applySelection = () => {
     <SpinnerComponent v-if="isLoading" />
     <div class="grid">
       <ExerciseCard v-for="exercise in filteredExercises" :key="exercise.id" :exercise="exercise"
-        :showColorDifficulty="showColorDifficulty" :showToggleSelection="true" @addExercise="addExercise" @removeExercise="removeExercise" />
+        :showColorDifficulty="showColorDifficulty" :showToggleSelection="isModal" @addExercise="addExercise" @removeExercise="removeExercise" />
     </div>
 
     <!-- Sentinel para infinite scroll -->

@@ -1,7 +1,7 @@
 <script setup>
 import HeaderComponent from '../components/HeaderComponent.vue';
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
 import { router } from '../router/index.js';
 import SpinComponent from './SpinnerComponent.vue';
@@ -10,7 +10,10 @@ import { useRoutineStore } from '../stores/routine.js';
 import { routineSchema } from '../validation/routineSchema.js';
 import { Routine } from '../model/Routine.js';
 import ExerciseComponent from './ExerciseComponent.vue';
+import CreateRoutineExercise from './CreateRoutineExercise.vue';
 import TableExercisesRoutine from './TableExercisesRoutine.vue';
+import ModalComponent from './ModalComponent.vue';
+
 
 const routineStore = useRoutineStore();
 
@@ -21,11 +24,45 @@ const isEdit = !!id;
 
 const isLoading = ref(true);
 
+const config = reactive({
+  isModalEditExerciseOpen: false,
+  routineExerciseEdit: null,
+  routineExerciseRemove: null
+})
+
+const openModalEditExercise = (routineExercise) => {
+  config.routineExerciseEdit = routineExercise;
+  config.isModalEditExerciseOpen = true;
+}
+
+const closeModalEditExercise = () => {
+  config.isModalEditExerciseOpen = false;
+}
+
+const saveModalEditExercise = (routineExercise) => {
+  config.isModalEditExerciseOpen = false;
+  const index = exercisesRoutineSeleted.value.findIndex((routineExercise) => routineExercise.id === routineExercise.id);
+  exercisesRoutineSeleted.value[index] = routineExercise;
+  ToastCumtom.success("Modificado correctamente.")
+}
+
+
+const removeRoutineExercise = (remove) => {
+  propsModal.value = { ...resetPropsModal };
+
+  if (remove) {
+    const index = exercisesRoutineSeleted.value.findIndex((routineExercise) => routineExercise.id === config.routineExerciseRemove.id);
+    exercisesRoutineSeleted.value.splice(index, 1);
+    ToastCumtom.success("Borrado correctamente.")
+  }
+}
+
 const initialValues = ref({
   id: '',
   name: '',
   description: ''
 });
+
 
 const handleSubmit = async (values, { resetForm }) => {
   try {
@@ -49,7 +86,7 @@ const handleSubmit = async (values, { resetForm }) => {
 };
 
 const showModalExercises = ref(false);
-const exercisesSeleted = ref([])
+const exercisesRoutineSeleted = ref([])
 
 const openModalExercises = () => {
   showModalExercises.value = true;
@@ -57,11 +94,27 @@ const openModalExercises = () => {
 
 const addExercises = (exercises) => {
   showModalExercises.value = false;
-  exercisesSeleted.value.push(...exercises);
+
+  for (let exercise of exercises) {
+
+    const exerciseRoutine = {
+      id: crypto.randomUUID(),
+      restTime: 90,
+      type: 'R',
+      timePerSet: 30,
+      numSeries: 3,
+      numRepeats: 10,
+      exercise: { ...exercise }
+    }
+
+    exerciseRoutine.timeEstimated = (4 * exerciseRoutine.numRepeats *  exerciseRoutine.numSeries) + (exerciseRoutine.numSeries - 1 * exerciseRoutine.restTime)
+    exercisesRoutineSeleted.value.push(exerciseRoutine);
+  }
+
 }
 
 const removeExercise = (exercise) => {
-  exercisesSeleted.value = exercisesSeleted.value.filter(e => e.id !== exercise.id);
+  exercisesRoutineSeleted.value = exercisesRoutineSeleted.value.filter(e => e.id !== exercise.id);
 }
 
 onMounted(async () => {
@@ -80,13 +133,32 @@ onMounted(async () => {
   }
   isLoading.value = false;
 });
+
+
+const resetPropsModal = {
+  caption: '',
+  description: '',
+  showModal: false
+};
+
+const propsModal = ref({ ...resetPropsModal })
+
+const showModalRemove = (routineExerciseRemove) => {
+  config.routineExerciseRemove = routineExerciseRemove;
+  propsModal.value.caption = 'Borrar ejercicio.'
+  propsModal.value.description = '¿Estas seguro que quieres borrar este ejercicio de tu rutina?'
+  propsModal.value.showModal = true
+}
+
 </script>
 
 <template>
   <HeaderComponent v-show="!showModalExercises" />
 
-  <SpinComponent v-if="isLoading" />
+  <ModalComponent @handleRemove="removeRoutineExercise" :caption="propsModal.caption"
+    :description="propsModal.description" :show-modal="propsModal.showModal" />
 
+  <SpinComponent v-if="isLoading" />
   <div class="form-container" v-else>
     <Form :validation-schema="routineSchema" :key="initialValues.id" :initial-values="initialValues"
       @submit="handleSubmit" id="template-routine-form">
@@ -94,18 +166,20 @@ onMounted(async () => {
 
       <div class="form-group">
         <label for="nameRoutine">Nombre:</label>
-        <Field as="input" id="nameRoutine" type="text" name="nameRoutine" placeholder="💪 Dia de brazos" />
+        <Field as="input" id="nameRoutine" type="text" name="nameRoutine" placeholder="🦵 Dia de piernas" />
         <ErrorMessage class="msg-error" name="nameRoutine" />
       </div>
 
       <!-- Description -->
       <div class="form-group">
         <label for="description">Descripción:</label>
-        <Field as="textarea" id="description" name="description" rows="4" placeholder="El dia que más me gusta..." />
+        <Field as="textarea" id="description" name="description" rows="4"
+          placeholder="Mi día favorito de toda la semana..." />
         <ErrorMessage class="msg-error" name="description" />
       </div>
 
-      <TableExercisesRoutine :exercises="exercisesSeleted" @addExercise="openModalExercises" />
+      <TableExercisesRoutine :exercisesRoutine="exercisesRoutineSeleted" @showModalRemove="showModalRemove"
+        @addExercise="openModalExercises" @openModalEditExercise="openModalEditExercise" />
 
       <button id="btSubmit" type="submit">
         Guardar
@@ -116,6 +190,9 @@ onMounted(async () => {
   <div class="modal" v-if="showModalExercises">
     <ExerciseComponent :is-modal="true" @addExercises="addExercises" />
   </div>
+
+  <CreateRoutineExercise v-if="config.isModalEditExerciseOpen" @saveModalEditExercise="saveModalEditExercise"
+    @closeModalEditExercise="closeModalEditExercise" :routineExercise="config.routineExerciseEdit" />
 
 </template>
 

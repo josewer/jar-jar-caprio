@@ -6,14 +6,13 @@ import ExerciseCard from './ExerciseCard.vue';
 
 
 const props = defineProps({
-    exercises : {
-        type : Array,
+    exercisesRoutine: {
+        type: Array,
         default: () => []
     }
 })
 
-const emit = defineEmits(["addExercise"])
-
+const emit = defineEmits(["addExercise" , "openModalEditExercise", "showModalRemove"])
 
 const rowSelected = ref()
 
@@ -30,41 +29,66 @@ const addExercise = () => {
     emit("addExercise");
 }
 
-const handleRemove = (value) => {
-
+const showModalRemove = (value) => { 
+    emit("showModalRemove" , value);
 }
+
+const menuOpen = ref(null);
+
+const toggleMenu = (id) => {
+  menuOpen.value = menuOpen.value === id ? null : id;
+};
+
+const editExercise = (exerciseRoutine) => {
+    emit("openModalEditExercise" , exerciseRoutine);
+};
+
+const closeMenu = () => {
+  menuOpen.value = null;
+};
 
 </script>
 
 <template>
 
-    <ModalComponent @handleRemove="handleRemove" :caption="propsModal.caption" :description="propsModal.description"
+    <ModalComponent @handleRemove="showModalRemove" :caption="propsModal.caption" :description="propsModal.description"
         :show-modal="propsModal.showModal" />
 
-    <div class="table-container">
+    <div class="table-container" >
         <div class="button-panel">
-            <button @click="addExercise">Añadir</button>
+            <button @click="addExercise" >Añadir</button>
+            <button @click="editExercise(rowSelected)" :disabled=!rowSelected>Editar</button>
+            <button class="btn-danger"  @click="showModalRemove(rowSelected)" :disabled=!rowSelected>Eliminar</button>
         </div>
-        <table class="exercise-table">
+        <table class="exercise-table" @click="closeMenu">
             <thead>
                 <tr>
                     <th></th>
-                    <th>Nombre</th>
                     <th>Series</th>
-                    <th>Repeticiones</th>
-                    <th style="text-align: center;">Borrar</th>
+                    <th>Reps</th>
+                    <th>Descanso</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr @click="rowSelected = exercise.id"
-                    :class="{ 'row-selected': rowSelected === exercise.id }" v-for="exercise in props.exercises"
-                    :key="exercise.id">
-                    <td><ExerciseCard :exercise="exercise" :compact="true"/></td>
-                    <td>{{ exercise.name }}</td>
-                    <td>{{ exercise.type }}</td>
-                    <td>{{ exercise.mainMuscle }}</td>
+                <tr @click="rowSelected = exerciseRoutine"
+                    :class="{ 'row-selected': rowSelected && rowSelected.id === exerciseRoutine.id }"
+                    v-for="exerciseRoutine in props.exercisesRoutine" :key="exerciseRoutine.id">
+                    <td>
+                        <ExerciseCard :exercise="exerciseRoutine.exercise" :compact="true" />
+                    </td>
 
-                    <td class="btn-remove" title="Remove"> ❌ </td>
+                    <td>{{ exerciseRoutine.numSeries }}</td>
+                    <td>{{ exerciseRoutine.numRepeats }}</td>
+                    <td>{{ exerciseRoutine.restTime }} seg</td>
+
+                    <td class="menu-dots-container" @click.stop="toggleMenu(exerciseRoutine.id)">
+                        ⋮
+                        <div v-if="menuOpen === exerciseRoutine.id" class="menu-dropdown">
+                            <a href="#" @click.prevent="editExercise(exerciseRoutine)">Editar</a>
+                            <a href="#" @click.prevent="showModalRemove(exerciseRoutine)">Borrar</a>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -72,9 +96,7 @@ const handleRemove = (value) => {
 </template>
 
 <style scoped>
-.btn-remove {
-    text-align: center;
-}
+
 
 /* Contenedor de botón encima de la tabla */
 .button-panel {
@@ -122,7 +144,8 @@ const handleRemove = (value) => {
     border-radius: 0px 0px 12px 12px;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;;
+    border-radius: 0.5rem;
+    ;
 }
 
 /* Encabezado */
@@ -173,9 +196,55 @@ button:disabled {
 }
 
 .exercise-table td:first-child {
-  max-width: 60px;
-  max-height: 60px;
-  overflow: hidden;
-  object-fit: cover; /* mantiene proporción y recorta */
+    max-width: 60px;
+    max-height: 60px;
+    overflow: hidden;
+    object-fit: cover;
+    /* mantiene proporción y recorta */
 }
+
+.btn-danger {
+    background:  #e74c3c !important; 
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+/* Menu 3 puntitos*/
+
+.menu-dots-container {
+    position: relative;
+    font-size: 9px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.menu-dropdown {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+ 
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 120px;
+    z-index: 10;
+}
+
+.menu-dropdown a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.menu-dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
 </style>

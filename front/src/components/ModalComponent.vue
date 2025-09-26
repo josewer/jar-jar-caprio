@@ -85,8 +85,8 @@ function stopDrag() {
             <p>{{description}}</p>
 
             <div class="button-panel">
-                <button class="btn btn-danger" @click="confirmDelete(true)">Delete</button>
-                <button class="btn btn-cancel" @click="confirmDelete(false)">Cancel</button>
+                <button class="btn btn-danger" @click="confirmDelete(true)">Borrar</button>
+                <button class="btn btn-cancel" @click="confirmDelete(false)">Cancelar</button>
             </div>
         </section>
     </div>
@@ -98,7 +98,7 @@ function stopDrag() {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 3;
 }
 
 /* Modal */
