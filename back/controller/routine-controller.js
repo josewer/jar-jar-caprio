@@ -54,7 +54,7 @@ export class RoutineController {
       const routine = await this.routineModel.post({ input: { ...result.data, userId } })
       return res.status(201).json(routine);
     } catch (error) {
-
+      console.error(error)
       if (error instanceof AppError) {
         return res.status(error.status).json(error);
       }

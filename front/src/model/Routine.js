@@ -1,9 +1,8 @@
 
 export class Routine {
 
-  constructor(name, description, id = null, userId = null, exercises = []) {
+  constructor( id = null , name, description, exercises = []) {
     this.id = id;
-    this.userId = userId;
     this.name = name;
     this.description = description;
     this.templateExercises = exercises;

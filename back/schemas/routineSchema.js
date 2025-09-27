@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { routineExerciseSchema } from './routineExercisesSchema.js'
 
 // Esquema para template_routine
 const routineSchema = z.object({
@@ -8,7 +9,9 @@ const routineSchema = z.object({
     .max(100, 'Routine name must be at most 100 characters'),
   description: z.string()
     .max(500, 'Description must be at most 500 characters')
-    .optional()
+    .optional(),
+  templateExercises: z.array(routineExerciseSchema)
+    .default([])
 });
 
 export function validate(object) {

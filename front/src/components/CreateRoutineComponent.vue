@@ -58,13 +58,13 @@ const removeRoutineExercise = (remove) => {
 }
 
 const initialValues = ref({
-  id: '',
   name: '',
   description: ''
 });
 
 
 const handleSubmit = async (values, { resetForm }) => {
+
   try {
     if (isEdit) {
       const routine = new TemplateRoutine(values.name, values.description, id);
@@ -73,7 +73,7 @@ const handleSubmit = async (values, { resetForm }) => {
         ToastCumtom.success("Modificado correctamente.");
       });
     } else {
-      const routine = new Routine(values.name, values.description);
+      const routine = new Routine(null, values.name, values.description, exercisesRoutineSeleted.value);
       await routineStore.create(routine);
       router.push({ name: 'Routines' }).then(() => {
         ToastCumtom.success("Creado correctamente.");
@@ -84,6 +84,10 @@ const handleSubmit = async (values, { resetForm }) => {
     ToastCumtom.error(error.message, error.status);
   }
 };
+
+const handleCancel = () => {
+  router.push({ name: 'Routines' });
+}
 
 const showModalExercises = ref(false);
 const exercisesRoutineSeleted = ref([])
@@ -99,15 +103,16 @@ const addExercises = (exercises) => {
 
     const exerciseRoutine = {
       id: crypto.randomUUID(),
-      restTime:'01:30',
+      restTime: '01:30',
       type: 'R',
       timePerSet: 30,
       numSeries: 3,
       numRepeats: 10,
+      exerciseId: exercise.id,
       exercise: { ...exercise }
     }
 
-    exerciseRoutine.timeEstimated = (4 * exerciseRoutine.numRepeats *  exerciseRoutine.numSeries) + (exerciseRoutine.numSeries - 1 * exerciseRoutine.restTime)
+    exerciseRoutine.timeEstimated = (4 * exerciseRoutine.numRepeats * exerciseRoutine.numSeries) + (exerciseRoutine.numSeries - 1 * exerciseRoutine.restTime)
     exercisesRoutineSeleted.value.push(exerciseRoutine);
   }
 
@@ -156,14 +161,16 @@ const showModalRemove = (routineExerciseRemove) => {
 
   <SpinComponent v-if="isLoading" />
   <div class="form-container" v-else>
+
     <Form :validation-schema="routineSchema" :key="initialValues.id" :initial-values="initialValues"
       @submit="handleSubmit" id="template-routine-form">
+
       <h2 class="form-title">{{ isEdit ? "Modificar rutina" : "Crear rutina" }}</h2>
 
       <div class="form-group">
-        <label for="nameRoutine">Nombre:</label>
-        <Field as="input" id="nameRoutine" type="text" name="nameRoutine" placeholder="🦵 Dia de piernas" />
-        <ErrorMessage class="msg-error" name="nameRoutine" />
+        <label for="name">Nombre:</label>
+        <Field as="input" id="name" type="text" name="name" placeholder="🦵 Dia de piernas" />
+        <ErrorMessage class="msg-error" name="name" />
       </div>
 
       <!-- Description -->
@@ -177,9 +184,10 @@ const showModalRemove = (routineExerciseRemove) => {
       <TableExercisesRoutine :exercisesRoutine="exercisesRoutineSeleted" @showModalRemove="showModalRemove"
         @addExercise="openModalExercises" @openModalEditExercise="openModalEditExercise" />
 
-      <button id="btSubmit" type="submit">
-        Guardar
-      </button>
+      <div class="actions">
+        <button id="btSubmit" type="submit">Guardar</button>
+        <button id="btCancel" class="btn-cancel" type="button" @click="handleCancel">Cancelar</button>
+      </div>
     </Form>
   </div>
 
@@ -196,6 +204,25 @@ const showModalRemove = (routineExerciseRemove) => {
 .msg-error {
   color: red;
 }
+
+.actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btn-cancel {
+  background-color: #e0e0e0;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #bdbdbd;
+}
+
 
 .form-container {
   display: flex;

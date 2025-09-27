@@ -1,5 +1,6 @@
 import { templateRoutineModel, templateExercisesModel, catExerciseModel } from './db.js';
 
+
 export class Routine {
   async get({ userId }) {
     return await templateRoutineModel.findAll({
@@ -48,12 +49,29 @@ export class Routine {
     return await templateRoutineModel.destroy({ where: { id, userId } });
   }
 
-  async post({ input }) {
-    return await templateRoutineModel.create({
-      id: crypto.randomUUID(),
-      ...input
-    });
-  }
+async post({ input }) {
+
+  const routineId = crypto.randomUUID();
+
+  return await templateRoutineModel.create(
+    {
+        id: routineId,
+        name: input.name,
+        description: input.description,
+        userId: input.userId,
+        templateExercises: (input.templateExercises || []).map(ex => ({
+          id: crypto.randomUUID(),
+          routineId,
+          exerciseId: ex.exerciseId,
+          numSeries: ex.numSeries,
+          numRepeats: ex.numRepeats
+        }))
+    },
+    {
+      include: [{ model: templateExercisesModel}]
+    }
+  );
+}
 
   async put({ id, input }) {
     const [numberOfAffectedRows, [updatedRoutine]] = await templateRoutineModel.update(

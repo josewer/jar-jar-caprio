@@ -5,7 +5,7 @@ const routineExerciseParamsSchema = z.object({
     .nonempty('Routine ID is required')
 });
 
-const routineExerciseSchema = z.object({
+export const routineExerciseSchema = z.object({
 
   exerciseId: z.uuid('Exercise ID must be a valid UUID')
     .nonempty('Exercise ID is required'),

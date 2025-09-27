@@ -10,6 +10,9 @@ export const useRoutineStore = defineStore('routine', () => {
   const END_POINT = '/routine';
 
   const create = async (routine) => {
+
+    console.log(routine);
+
     try {
       const response = await api.post(END_POINT, routine);
       const data = response.data;

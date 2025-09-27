@@ -24,12 +24,12 @@ function closeModal() {
 <template>
 
   <div class="template-card">
-    <h2 class="title">{{ props.routine.name }}</h2>
+    <h2 class="title">{{ props.routine?.name }}</h2>
 
     <div class="templates">
-      <div v-for="template in props.routine.templateExercises" :key="template.id" class="template"
+      <div v-for="template in props.routine?.templateExercises" :key="template.id" class="template"
         @click="openModal(template)">
-        {{ template.exercise.name }}
+        {{ template.exercise?.name }}
       </div>
     </div>
 

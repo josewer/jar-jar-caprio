@@ -56,9 +56,9 @@ const closeMenu = () => {
 
     <div class="table-container" >
         <div class="button-panel">
-            <button @click="addExercise" >Añadir</button>
-            <button @click="editExercise(rowSelected)" :disabled=!rowSelected>Editar</button>
-            <button class="btn-danger"  @click="showModalRemove(rowSelected)" :disabled=!rowSelected>Eliminar</button>
+            <button type="button" @click="addExercise" >Añadir</button>
+            <button type="button" @click="editExercise(rowSelected)" :disabled=!rowSelected>Editar</button>
+            <button type="button" class="btn-danger"  @click="showModalRemove(rowSelected)" :disabled=!rowSelected>Eliminar</button>
         </div>
         <table class="exercise-table" @click="closeMenu">
             <thead>
