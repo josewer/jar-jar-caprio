@@ -4,7 +4,7 @@ import { templateExercisesModel, catExerciseModel, templateRoutineModel } from '
 export class RoutineExercises {
   async get({ routineId, userId }) {
     return await templateExercisesModel.findAll({
-      attributes: ['id', 'routineId', 'exerciseId', 'numSeries', 'numRepeats'],
+         attributes: ['id', 'numSeries', 'numRepeats' , 'timePerSet' , 'restTime' , 'type'],
       include: [
         {
           model: templateRoutineModel,
@@ -17,7 +17,7 @@ export class RoutineExercises {
 
   async getById({ id, routineId, userId }) {
     return await templateExercisesModel.findByPk(id, {
-      attributes: ['id', 'routineId', 'exerciseId', 'numSeries', 'numRepeats'],
+         attributes: ['id', 'numSeries', 'numRepeats' , 'timePerSet' , 'restTime' , 'type'],
       include: [
         {
           model: catExerciseModel,

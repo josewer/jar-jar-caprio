@@ -14,7 +14,6 @@ import CreateRoutineExercise from './CreateRoutineExercise.vue';
 import TableExercisesRoutine from './TableExercisesRoutine.vue';
 import ModalComponent from './ModalComponent.vue';
 
-
 const routineStore = useRoutineStore();
 
 const route = useRoute();
@@ -31,6 +30,7 @@ const config = reactive({
 })
 
 const openModalEditExercise = (routineExercise) => {
+  console.log(routineExercise.exerciseId)
   config.routineExerciseEdit = routineExercise;
   config.isModalEditExerciseOpen = true;
 }
@@ -41,17 +41,26 @@ const closeModalEditExercise = () => {
 
 const saveModalEditExercise = (routineExercise) => {
   config.isModalEditExerciseOpen = false;
-  const index = exercisesRoutineSeleted.value.findIndex((routineExercise) => routineExercise.id === routineExercise.id);
+  const index = exercisesRoutineSeleted.value.findIndex((exercise) => exercise.exerciseId === routineExercise.exerciseId);
   exercisesRoutineSeleted.value[index] = routineExercise;
   ToastCumtom.success("Modificado correctamente.")
 }
 
 
+const getExercises = () => {
+  const exercises = [];
+  for (let exerciseRoutine of exercisesRoutineSeleted.value) {
+    exercises.push(exerciseRoutine.exercise);
+  }
+
+  return exercises;
+}
+
 const removeRoutineExercise = (remove) => {
   propsModal.value = { ...resetPropsModal };
 
   if (remove) {
-    const index = exercisesRoutineSeleted.value.findIndex((routineExercise) => routineExercise.id === config.routineExerciseRemove.id);
+    const index = exercisesRoutineSeleted.value.findIndex((exercise) => exercise.exerciseId === config.routineExerciseRemove.exerciseId);
     exercisesRoutineSeleted.value.splice(index, 1);
     ToastCumtom.success("Borrado correctamente.")
   }
@@ -67,10 +76,11 @@ const handleSubmit = async (values, { resetForm }) => {
 
   try {
     if (isEdit) {
-      const routine = new TemplateRoutine(values.name, values.description, id);
+       const routine = new Routine(id, values.name, values.description, exercisesRoutineSeleted.value);
+       console.log(routine)
       await routineStore.update(id, routine);
       router.push({ name: 'Routines' }).then(() => {
-        ToastCumtom.success("Modificado correctamente.");
+      ToastCumtom.success("Modificado correctamente.");
       });
     } else {
       const routine = new Routine(null, values.name, values.description, exercisesRoutineSeleted.value);
@@ -102,10 +112,9 @@ const addExercises = (exercises) => {
   for (let exercise of exercises) {
 
     const exerciseRoutine = {
-      id: crypto.randomUUID(),
       restTime: '01:30',
       type: 'R',
-      timePerSet: 30,
+      timePerSet: '00:30',
       numSeries: 3,
       numRepeats: 10,
       exerciseId: exercise.id,
@@ -119,9 +128,11 @@ const addExercises = (exercises) => {
 }
 
 onMounted(async () => {
+
   if (isEdit) {
     try {
       const routine = await routineStore.getById(id);
+      exercisesRoutineSeleted.value = routine.templateExercises;
       if (routine) {
         initialValues.value = { ...routine };
       } else {
@@ -132,7 +143,9 @@ onMounted(async () => {
       ToastCumtom.error(error.message, error.status);
     }
   }
+
   isLoading.value = false;
+ 
 });
 
 
@@ -192,7 +205,7 @@ const showModalRemove = (routineExerciseRemove) => {
   </div>
 
   <div class="modal" v-if="showModalExercises">
-    <ExerciseComponent :is-modal="true" @addExercises="addExercises" />
+    <ExerciseComponent :isModal="true" @addExercises="addExercises" :selectedExercises="getExercises()" />
   </div>
 
   <CreateRoutineExercise v-if="config.isModalEditExerciseOpen" @saveModalEditExercise="saveModalEditExercise"

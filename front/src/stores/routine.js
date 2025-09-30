@@ -11,8 +11,6 @@ export const useRoutineStore = defineStore('routine', () => {
 
   const create = async (routine) => {
 
-    console.log(routine);
-
     try {
       const response = await api.post(END_POINT, routine);
       const data = response.data;
@@ -43,20 +41,32 @@ export const useRoutineStore = defineStore('routine', () => {
   };
 
 
-  const getById = async (id) => {
-    try {
-      const response = await api.get(`${END_POINT}/${id}`);
-      routine.value = response.data;
-      return routine.value;
-    } catch (error) {
-      throw error;
-    }
+const getById = async (id) => {
+  try {
+    const response = await api.get(`${END_POINT}/${id}`);
+    const template = response.data; 
+
+    const result = {
+      ...template,
+      templateExercises: template.templateExercises.map(ex => ({
+        ...ex,
+        exerciseId: ex.exercise.id
+      }))
+    };
+
+    routine.value = result;
+    return routine.value;
+  } catch (error) {
+    throw error;
   }
+};
+
 
   const getAll = async () => {
     try {
       const response = await api.get(END_POINT);
       routines.value = response.data;
+
       return response.data;
     } catch (error) {
       throw error;

@@ -71,11 +71,14 @@ export const templateExercisesModel = sequelize.define('templateExercises', {
   routineId: { type: DataTypes.UUID, allowNull: false, field: "routine_id" },
   exerciseId: { type: DataTypes.UUID, allowNull: false, field: "exercise_id" },
   numSeries: { type: DataTypes.INTEGER, field: "num_series" },
-  numRepeats: { type: DataTypes.INTEGER, field: "num_repeats" }
+  numRepeats: { type: DataTypes.INTEGER, field: "num_repeats" },
+  restTime: { type: DataTypes.STRING, field: "rest_time" },       
+  type: { type: DataTypes.STRING(1) },                           
+  timePerSet: { type: DataTypes.STRING, field: "time_per_set" }  
 }, {
   tableName: 'template_exercises',
   timestamps: false,
-  attributes: { exclude: ['routine_id', 'exercise_id', 'num_series', 'num_repeats'] }
+  attributes: { exclude: ['routine_id', 'exercise_id', 'num_series', 'num_repeats' , 'rest_time' , 'time_per_set'] }
 });
 
 

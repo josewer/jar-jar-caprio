@@ -1,15 +1,18 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted , ref } from 'vue';
 import { useRoutineStore } from '../stores/routine';
 import HeaderComponent from './HeaderComponent.vue';
 import RutineCard from './RoutineCard.vue';
 import { router } from '../router';
+import SpinnerComponent from './SpinnerComponent.vue';
 
 const routineStore = useRoutineStore();
 
+const isLoading = ref(true);
 
 onMounted(async () => {
   await routineStore.getAll();
+  isLoading.value = false;
 });
 
 
@@ -24,7 +27,7 @@ const createRoutine = () => {
 <template>
   <HeaderComponent />
 
-  <div class="exercise-selector">
+  <div class="exercise-selector" v-if="!isLoading">
 
     <div class="grid">
       <div class="template-card create-card" @click="createRoutine" >
@@ -33,7 +36,7 @@ const createRoutine = () => {
       <RutineCard v-for="routine in routineStore.routines" :key="routine.id" :routine="routine" />
     </div>
   </div>
-
+  <SpinnerComponent v-else/>
 
 </template>
 

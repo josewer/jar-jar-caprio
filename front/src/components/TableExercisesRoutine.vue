@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import ModalComponent from '../components/ModalComponent.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import ExerciseCard from './ExerciseCard.vue';
 
 
@@ -16,11 +16,16 @@ const emit = defineEmits(["addExercise" , "openModalEditExercise", "showModalRem
 
 const rowSelected = ref()
 
+watch(props.exercisesRoutine, () => {
+    rowSelected.value = null;
+});
+
 const resetPropsModal = {
     caption: '',
     description: '',
     showModal: false
 };
+
 
 const propsModal = ref({ ...resetPropsModal })
 
@@ -40,6 +45,7 @@ const toggleMenu = (id) => {
 };
 
 const editExercise = (exerciseRoutine) => {
+    console.log(exerciseRoutine.exerciseId)
     emit("openModalEditExercise" , exerciseRoutine);
 };
 
@@ -65,26 +71,26 @@ const closeMenu = () => {
                 <tr>
                     <th></th>
                     <th>Series</th>
-                    <th>Reps</th>
+                    <th>Reps / Tiempo</th>
                     <th>Descanso</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr @click="rowSelected = exerciseRoutine"
-                    :class="{ 'row-selected': rowSelected && rowSelected.id === exerciseRoutine.id }"
-                    v-for="exerciseRoutine in props.exercisesRoutine" :key="exerciseRoutine.id">
+                    :class="{ 'row-selected': rowSelected && rowSelected.exerciseId === exerciseRoutine.exerciseId }"
+                    v-for="exerciseRoutine in props.exercisesRoutine" :key="exerciseRoutine.exerciseId">
                     <td>
                         <ExerciseCard :exercise="exerciseRoutine.exercise" :compact="true" />
                     </td>
 
                     <td>{{ exerciseRoutine.numSeries }}</td>
-                    <td>{{ exerciseRoutine.numRepeats }}</td>
+                    <td>{{ exerciseRoutine.type === 'R' ? exerciseRoutine.numRepeats : `${exerciseRoutine.timePerSet} min` }}</td>
                     <td>{{ exerciseRoutine.restTime }} min</td>
 
-                    <td class="menu-dots-container" @click.stop="toggleMenu(exerciseRoutine.id)">
-                        ⋮
-                        <div v-if="menuOpen === exerciseRoutine.id" class="menu-dropdown">
+                    <td class="menu-dots-container" @click.stop="toggleMenu(exerciseRoutine.exerciseId)">
+                    ⋮
+                        <div v-if="menuOpen === exerciseRoutine.exerciseId" class="menu-dropdown">
                             <a href="#" @click.prevent="editExercise(exerciseRoutine)">Editar</a>
                             <a href="#" @click.prevent="showModalRemove(exerciseRoutine)">Borrar</a>
                         </div>

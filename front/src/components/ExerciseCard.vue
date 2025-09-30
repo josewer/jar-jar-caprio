@@ -14,14 +14,14 @@ const props = defineProps({
         type: Boolean,
         default: () => false
     },
-    selectedExercises: {
-        type: Array,
-        default: () => []
-    },
     showContentCard: {
         type: Boolean,
         default: () => true
     }, compact: {
+        type: Boolean,
+        default: () => false
+    }
+    , isCheck: {
         type: Boolean,
         default: () => false
     }
@@ -59,6 +59,7 @@ function toggleSelection(exercise, event) {
 
 <template>
     <div class="card" :class="{ compact: compact }"
+        :style="{ background: getDifficultyColor(props.exercise.difficulty, props.showColorDifficulty) }"
         @click="openModalExercise(props.exercise)" @mouseenter="hoveredExerciseId = props.exercise.id"
         @mouseleave="hoveredExerciseId = null">
         <div class="card-img-container">
@@ -67,17 +68,18 @@ function toggleSelection(exercise, event) {
                 : `/src/assets/exercises/thumbnails/${props.exercise.id}.webp`" class="card-img" />
 
             <input v-if="showToggleSelection" type="checkbox" class="card-checkbox"
-                :checked="props.selectedExercises.includes(props.exercise.id)"
+                :checked="isCheck"
+                :disabled="isCheck"
                 @click.stop="toggleSelection(props.exercise, $event)" />
         </div>
-        <div class="card-content" :style="{ background: getDifficultyColor(props.exercise.difficulty, props.showColorDifficulty) }">
+        <div class="card-content">
             <h3 class="card-title">{{ props.exercise.name }}</h3>
             <p class="card-subtitle">{{ props.exercise.mainMuscle }}</p>
         </div>
     </div>
 
-    <ExerciseDetails v-if="showModalExercise" @closeModal="closeModalExercise" :showColorDifficulty="showColorDifficulty"
-        :id="modalExercise.id" />
+    <ExerciseDetails v-if="showModalExercise" @closeModal="closeModalExercise"
+        :showColorDifficulty="showColorDifficulty" :id="modalExercise.id" />
 
 </template>
 

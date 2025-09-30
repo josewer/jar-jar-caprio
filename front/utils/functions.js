@@ -15,3 +15,9 @@ export const getDifficultyColor = (difficulty, show) => {
       return 'var(--card-background-color-default)';
   }
 }
+
+
+export function parseTimeToSeconds(time) {
+  const [min, sec] = time.split(':').map(Number)
+  return min * 60 + sec
+}

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useExerciseStore } from '../stores/exercise';
 import FilterExercise from './FilterExercise.vue'
 import HeaderComponent from './HeaderComponent.vue'
@@ -11,8 +11,12 @@ const emit = defineEmits(["addExercises"])
 
 const props = defineProps({
   isModal: {
-    Boolean,
+    type: Boolean,
     default: () => false
+  },
+  selectedExercises : {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -95,6 +99,7 @@ const applySelection = () => {
     <SpinnerComponent v-if="isLoading" />
     <div class="grid">
       <ExerciseCard v-for="exercise in filteredExercises" :key="exercise.id" :exercise="exercise"
+        :isCheck="props.selectedExercises.find(f => f.id === exercise.id) != null"
         :showColorDifficulty="showColorDifficulty" :showToggleSelection="isModal" @addExercise="addExercise" @removeExercise="removeExercise" />
     </div>
 

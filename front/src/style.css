@@ -54,6 +54,7 @@ li {
   cursor: pointer;
 }
 
+
 .button-default {
   padding: 0.5rem 1rem;
   background: var(--card-background-color-default);
@@ -70,3 +71,4 @@ li {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4);
 }
+

@@ -16,6 +16,16 @@ export const routineExerciseSchema = z.object({
   numRepeats: z
     .number({ required_error: "Number of repeats is required" })
     .positive("Number of repeats must be positive")
+    .optional(),
+  timePerSet: z
+    .string().regex(/^\d{2}:\d{2}$/, "Time per set must be in mm:ss format")
+    .optional(),
+  restTime: z
+    .string().regex(/^\d{2}:\d{2}$/, "Rest time must be in mm:ss format")
+    .optional(),
+  type: z
+    .string({ required_error: "Type is required" })
+    .max(1, "Type must be a single character")
     .optional()
 });
 

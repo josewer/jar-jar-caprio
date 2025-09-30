@@ -98,3 +98,8 @@ ALTER TABLE cat_exercise
 
 ALTER TABLE cat_exercise
   ALTER COLUMN equipment TYPE VARCHAR(50)[];
+
+ALTER TABLE template_exercises
+  ADD COLUMN rest_time VARCHAR(5),
+  ADD COLUMN type CHAR(1),
+  ADD COLUMN time_per_set VARCHAR(5);

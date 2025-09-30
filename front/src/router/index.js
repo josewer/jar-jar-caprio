@@ -39,6 +39,11 @@ export const router = createRouter({
             component: CreateRoutineComponent
         },
         {
+            path: "/routine/:id",
+            name: "routine-detail",
+            component: CreateRoutineComponent
+        },
+        {
             path: "/info",
             name: "Info",
             component: InfoComponent
