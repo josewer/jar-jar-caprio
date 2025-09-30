@@ -5,6 +5,7 @@ import { router } from '../router';
 import { parseTimeToSeconds } from '../../utils/functions';
 import ModalComponent from './ModalComponent.vue';
 import { useRoutineStore } from '../stores/routine';
+import { ToastCumtom } from '../../utils/toast';
 
 const routineStore = useRoutineStore();
 
@@ -29,6 +30,16 @@ function closeModal() {
 const editRoutine = () => {
   router.push({
     name: 'routine-detail',
+    params: {
+      id: props.routine.id
+    }
+  })
+}
+
+
+const startSession = () => {
+  router.push({
+    name: 'session',
     params: {
       id: props.routine.id
     }
@@ -80,6 +91,7 @@ const removeRoutine = async (remove) => {
 
   if (remove) {
      await routineStore.deleteRutine(props.routine.id)
+       ToastCumtom.success("Borrado correctamente.")
   }
 }
 
@@ -93,8 +105,8 @@ const removeRoutine = async (remove) => {
   <div class="template-card" @click.self="editRoutine">
 
     <div class="card-buttons-top">
-      <button class="btn-top" @click.stop="console.log('Botón 1')">▶️</button>
-      <button class="btn-top" @click="showModalRemove">❌</button>
+      <button class="btn-top" @click.self="startSession">▶️</button>
+      <button class="btn-top" @click.self="showModalRemove">❌</button>
     </div>
 
     <h2 class="title" @click.self="editRoutine">{{ props.routine.name }}</h2>

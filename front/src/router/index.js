@@ -10,6 +10,7 @@ import RoutineDashBoard from "../components/RoutineDashBoard.vue";
 import ExerciseComponent from "../components/ExerciseComponent.vue";
 import RoutineManager from "../components/RoutineManager.vue";
 import CreateRoutineComponent from "../components/CreateRoutineComponent.vue";
+import Session from "../components/Session.vue";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -61,6 +62,11 @@ export const router = createRouter({
             path: "/exercises",
             name: "exercises",
             component: ExerciseComponent
+        },
+        {
+            path: "/session/:id",
+            name: "session",
+            component: Session
         }]
 });
 
